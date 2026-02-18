@@ -1,8 +1,8 @@
 ---@meta
 
 --[[
-    Version: 1.1.1
-    Modular Version: 4.4.0
+    Version: 1.1.2
+    Modular Version: 4.5.2
 --]]
 
 --#region Aliases
@@ -100,14 +100,14 @@
 --- Percents are returned normalized to 100, and are rounded down.\
 --- Examples: 40% -> 40 | 45.3% -> 45 | 87.9% -> 87
 --- @nodiscard
-function hpcheck(target, getAs) return 0 end;
+function gethp(target, getAs) return 0 end;
 
 --- @param target TargetSingle
 --- @return integer
 --- Returns the MP/SP value from a target.\
 --- Abnormalities will always return 0.
 --- @nodiscard
-function mpcheck(target) return 0 end;
+function getsp(target) return 0 end;
 
 --- @param buffKeyword string
 --- @param mode "stack" | "turn" | "+" | "*" | "consumed" -- "stack" = Potency, "turn" = Count, "+" = potency + count, "*" = potency × count, "consumed" = total consumed amount.
@@ -115,7 +115,7 @@ function mpcheck(target) return 0 end;
 --- @return integer
 --- Returns a specified buff's property from a target.
 --- @nodiscard
-function bufcheck(target, buffKeyword, mode) return 0 end
+function getbuff(target, buffKeyword, mode) return 0 end
 
 --- @return integer
 --- Returns the damage dealt from "OnSucceedAttack" and "WhenHit" timings.
@@ -125,19 +125,19 @@ function getdmg() return 0 end
 --- @return integer
 --- Returns the current turn number.
 --- @nodiscard
-function round() return 0 end
+function getround() return 0 end
 
 --- @return integer
 --- Returns the current wave number.
 --- @nodiscard
-function wave() return 0 end
+function getwave() return 0 end
 
 --- @return integer
 --- [NOTE] This always return 0 in Lua scripts.\
 --- Returns the number of times a Modular script has been called.\
 --- First time = 0.\
 --- @nodiscard
-function activations() return 0 end
+function getactivations() return 0 end
 
 --- @param target TargetSingle
 --- @return -1 | 0 | 1 | 2
@@ -147,13 +147,13 @@ function activations() return 0 end
 --- 1: Unit is alive.\
 --- 2: Unit is staggered.
 --- @nodiscard
-function unitstate(target) return 0 end
+function getunitstate(target) return 0 end
 
 --- @param target TargetSingle
 --- @return integer
 --- Returns the unitID of a target.
 --- @nodiscard
-function getid(target) return 0 end
+function getinstid(target) return 0 end
 
 --- @param target TargetSingle
 --- @return integer
@@ -165,14 +165,14 @@ function getcharacterid(target) return 0 end
 --- @return integer
 --- Returns the unique instance ID for a target.
 --- @nodiscard
-function instid(target) return 0 end
+function getinstid(target) return 0 end
 
 --- @param target TargetSingle
 --- @param slotIndex? integer -- Check a specific slot's speed instead.
 --- @return integer
 --- Returns the speed of a target.
 --- @nodiscard
-function speedcheck(target, slotIndex) return 0 end
+function getspeed(target, slotIndex) return 0 end
 
 --- @param target TargetSingle
 --- @return integer
@@ -194,7 +194,7 @@ function getdata(target, dataId) return 0 end
 --- @return integer
 --- Returns the amount of dead units who were allied with the target.
 --- @nodiscard
-function deadallies(target) return 0 end
+function getdeadallies(target) return 0 end
 
 --- @param min integer
 --- @param max integer
@@ -214,7 +214,7 @@ function getshield(target) return 0 end
 --- @return ModularBoolean
 --- Returns whether two targets are allied (1) or enemies (0).
 --- @nodiscard
-function areallied(target1, target2) return 0 end
+function areallies(target1, target2) return 0 end
 
 --- @return integer
 --- Returns the id of the skill currently being used.\
@@ -234,7 +234,7 @@ function getcoincount(target, get) return 0 end
 --- @return integer
 --- Returns how many coins flipped a specific side.
 --- @nodiscard
-function allcoinstate(target, get) return 0 end
+function getallcoinstates(target, get) return 0 end
 
 --- @param get "full"
 --- @param target TargetSingle
@@ -242,14 +242,14 @@ function allcoinstate(target, get) return 0 end
 --- Returns if all the coins matched the same side, as well as what side they all matched.\
 --- 0: Mixed | 1: All Heads | 2: All Tails
 --- @nodiscard
-function allcoinstate(target, get) return 0 end
+function getallcoinstates(target, get) return 0 end
 
 --- @param type "highres" | "highperfect" | Sin | "perfectCRIMSON" | "perfectSCARLET" | "perfectAMBER" | "perfectSHAMROCK" | "perfectAZURE" | "perfectINDIGO" | "perfectVIOLET"
 --- @return integer
 --- Returns the resonance count of the given type.\
 --- "highres" and "highperfect" will return the highest resonance.
 --- @nodiscard
-function resonance(type) return 0 end
+function getresonance(type) return 0 end
 
 --- @param target TargetSingle
 --- @param mode "AND" | "OR"
@@ -264,33 +264,33 @@ function haskey(target, mode, ...) return 0 end
 --- @return integer
 --- Returns the amount of available sin resources.
 --- @nodiscard
-function resource(type, enemy) return 0 end;
+function getresource(type, enemy) return 0 end;
 
 --- @param target TargetSingle
 --- @return integer
 --- Returns the current skill's base power.
 --- @nodiscard
-function skillbase(target) return 0 end
+function getskillbase(target) return 0 end
 
 --- @param target TargetSingle
 --- @return integer
 --- Returns the current skill's attack weight.
 --- @nodiscard
-function skillatkweight(target) return 0 end
+function getskillatkweight(target) return 0 end
 
 --- @param target TargetSingle
 --- @param coinIndex integer -- The coin to get the coin power forww
 --- @return integer
 --- Returns the current skill's coin power.
 --- @nodiscard
-function onescale(target, coinIndex) return 0 end
+function getcoinscale(target, coinIndex) return 0 end
 
 --- @param target TargetSingle
 --- @param coinIndex integer
 --- @return integer
 --- Returns the current skill's level correction (+5, -5, +3, etc.).
 --- @nodiscard
-function skillatklevel(target, coinIndex) return 0 end
+function getskillatklevel(target, coinIndex) return 0 end
 
 --- @param target TargetSingle
 --- @return integer
@@ -303,51 +303,51 @@ function getskilllevel(target) return 0 end
 --- Returns the current skill's attack type.\
 --- 0: Slash | 1: Pierce | 2: Blunt | 3: None
 --- @nodiscard
-function skillatk(target) return 0 end
+function getskillatk(target) return 0 end
 
 --- @param target TargetSingle
 --- @return 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11
 --- Returns the current skill's sin affinity as an integer between 0 and 11.\
 --- 0: Wrath | 1: Lust | 2: Sloth | 3: Gluttony | 4: Gloom | 5: Pride | 6: Envy | 7: White | 8: Black | 9: Red | 10: Pale | 11: Neutral
 --- @nodiscard
-function skillattribute(target) return 0 end
+function getskillattribute(target) return 0 end
 
 --- @param target TargetSingle
 --- @return 0 | 1 | 2 | 3 | 4 | 5
 --- Returns the current skill's defense type (if any).\
 --- 0: None | 1: Guard | 2: Evade | 3: Counter | 4: Attack | 5: Non-Action
 --- @nodiscard
-function skilldeftype(target) return 0 end
+function getskilldeftype(target) return 0 end
 
 --- @param target TargetSingle
 --- @return integer
 --- Returns the tier of the current skill, usually 1~3.
 --- @nodiscard
-function skillrank(target) return 0 end
+function getskillrank(target) return 0 end
 
 --- @param target TargetSingle
 --- @return 0 | 1 | 2 | 3 | 4 | 5 | 6
 --- Returns the current skill's E.G.O. type (if any).\
 --- 0: Skill | 1: Awaken | 2: Corrosion | 3: Corrosion Unstable | 4: Corrosion Stable | 5: Upgrade | 6: None
 --- @nodiscard
-function skillegotype(target) return 0 end
+function getskillegotype(target) return 0 end
 
 --- @param target TargetSingle
 --- @return integer
 --- Returns the number of attacks the target is being targeted by.
 --- @nodiscard
-function amountattacks(target) return 0 end
+function getattackamount(target) return 0 end
 
 --- @return ModularBoolean
 --- Returns whether the coin this script is on is broken.
 --- @nodiscard
-function coinisbroken() return 0 end
+function iscoinbroken() return 0 end
 
 --- @param target TargetSingle
 --- @return integer
 --- Returns the amount of skill slots the target has.
 --- @nodiscard
-function skillslotcount(target) return 0 end
+function getskillslotcount(target) return 0 end
 
 --- @return ModularBoolean
 --- Returns 1 if the battle is a focused encounter, 0 if it is a regular encounter.
@@ -373,20 +373,20 @@ function getbuffcount(target, mode) return 0 end
 --- Returns the amount of units matching the target selector.\
 --- Example: unitcount(NoParts99) would return the amount of enemies alive.
 --- @nodiscard
-function unitcount(target) return 0 end
+function getunitcount(target) return 0 end
 
 --- @param target TargetSingle
 --- @return integer
 --- Returns the amount of stagger bars on the target.
 --- @nodiscard
-function breakcount(target) return 0 end
+function getbreakcount(target) return 0 end
 
 --- @param target TargetSingle
 --- @param index integer? -- Stagger bar index (0 would be the first Stagger bar).
 --- @return integer
 --- Returns the HP value that a target's stagger bar lies.
 --- @nodiscard
-function breakvalue(target, index) return 0 end
+function getbreakvalue(target, index) return 0 end
 
 --- @param param "dayofweek" | "dayofmonth" | "dayofyear" | "hours" | "minutes" | "seconds" | "milliseconds" | "ticks" | "month" | "year" | "isleapyear"
 --- @param leapYear integer?
@@ -394,7 +394,7 @@ function breakvalue(target, index) return 0 end
 --- Returns requested time component or leap-year info.\
 --- [Combat Start] Gain 1 Clash Power Up for every 25 seconds that passed during the chaining phase (max 4)
 --- @nodiscard
-function timeget(param, leapYear) return 0 end
+function gettime(param, leapYear) return 0 end
 
 --- @param target TargetSingle
 --- @param statName "deployment" | "deadAllyCount" | SinRes | "panicType" | "isRetreated" | "speedMin" | "speedMax" | "speedMinOG" | "speedMaxOG" | "hasMP" | "deflevel"
@@ -406,7 +406,7 @@ function getstat(target, statName) return 0 end
 --- @return ModularBoolean
 --- Returns whether the coin was reused.
 --- @nodiscard
-function coinrerolled() return 0 end
+function iscoinrerolled() return 0 end
 
 --- @param var1 integer
 --- @param add "add"
@@ -445,39 +445,40 @@ function isusableinduel(target) return 0 end
 --- @return ModularBoolean
 --- Returns whether both selectors refer to the exact same unit.
 --- @nodiscard
-function sameunit(target1, target2) return 0 end
+function issameunit(target1, target2) return 0 end
 
 --- @param target TargetSingle
 --- @return ModularBoolean
 --- Returns whether the target's skill is clashable.
 --- @nodiscard
-function skillcanduel(target) return 0 end
+function getskillcanduel(target) return 0 end
 
 --- @param target TargetSingle
 --- @return ModularBoolean
 --- Returns whether the target's skill can target their allies.
 --- @nodiscard
-function skillteamkill(target) return 0 end
+function getskillteamkill(target) return 0 end
 
 --- @param target TargetSingle
 --- @return ModularBoolean
 --- Returns whether the target's skill cannot be redirected.
 --- @nodiscard
-function skillfixedtarget(target) return 0 end
+function getskillfixedtarget(target) return 0 end
 
 --- @param target TargetSingle
+--- @param coinIndex integer
 --- @return 1 | 2 | 3
 --- Returns an integer representing the coin's operator type.\
 --- 1: Plus Coin | 2: Minus Coin | 3: Multiply Coin
 --- @nodiscard
-function coinoperator(target, coinIndex) return 1 end
+function getcoinoperator(target, coinIndex) return 1 end
 
 --- @param keyword string
 --- @return 0 | 1 | 2
 --- Returns an integer representing the buff's type.\
 --- 0: Neutral | 1: Positive | 2: Negative
 --- @nodiscard
-function bufftype(keyword) return 1 end
+function getbufftype(keyword) return 1 end
 
 --- @param target TargetSingle
 --- @param atkType AttackTypeCaps
@@ -499,7 +500,7 @@ function getsinres(target, sin) return 0 end;
 --- @return ModularBoolean
 --- Returns whether the unit used a defense skill or not this turn.
 --- @nodiscard
-function useddefaction(target) return 0 end;
+function hasuseddefense(target) return 0 end;
 
 --- @return 0 | 1 | 2 |3
 --- Returns an integer representing the status of the chain of skills on the dashboard.\
@@ -508,7 +509,15 @@ function useddefaction(target) return 0 end;
 --- 2: Only Defensive (Guard/Evade) skills are chained.\
 --- 3: Both Offensive and Defensive skills are chained.
 --- @nodiscard
-function chainstatus() return 0 end;
+function getchainstatus() return 0 end;
+
+--- @param sin Sin
+--- @param layer "TOP" | "BOTTOM" | "BOTH" | "NEITHER" -- What layer to count
+--- @param includePrediction? ModularBoolean -- Off by default
+--- Returns an integer representing the amount of sins on the dashboard.
+--- @nodiscard
+--- @overload fun(option: "HIGHEST" | "LOWEST", layer, includePrediction) end
+function getsinsindashboard(sin, layer, includePrediction) end
 
 --- @return 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 --- Returns an integer representing where the buff came from.\
@@ -559,10 +568,9 @@ function bonusdmg(target, damage, atkType, sinType) end
 
 --- @param target TargetMulti
 --- @param amount integer
---- [IMPORTANT] Despite its name, this will increase sanity rather than decrease it.\
 --- Heal/Damage SP on the target by the given value.
 --- Do not use this on the "IgnorePanic" timing, as it will crash the game due to recursion.
-function mpdmg(target, amount) end
+function healsp(target, amount) end
 
 --- @param target TargetMulti
 --- @param buffKeyword string
@@ -571,7 +579,7 @@ function mpdmg(target, amount) end
 --- @param activeRound 0 | 1 | 2 This Turn | Next Turn | Both
 --- @param consume? "use" -- Attempt to "consume" the buff instead of removing it.
 --- Inflicts, modifies, or consumes a buff on the target specified by keyword. Negative potency/count can be used to consume the buff instead.
-function buf(target, buffKeyword, potency, count, activeRound, consume) end
+function buff(target, buffKeyword, potency, count, activeRound, consume) end
 
 --- @param target TargetMulti
 --- @param amount integer
@@ -587,7 +595,7 @@ function healhp(target, amount) end
 --- @param target TargetMulti
 --- @param times integer -- How many times to trigger.
 --- Triggers Tremor Burst on the target.
-function explosion(target, times) end
+function burst(target, times) end
 
 --- @param target TargetMulti
 --- @param value integer
@@ -830,7 +838,7 @@ function sound(type, toPlay) end
 --- @param target TargetMulti
 --- @param amount integer
 --- Triggers Sinking Deluge.
-function surge(target, amount) end
+function deluge(target, amount) end
 
 --- @param target TargetMulti
 --- @param ability string
@@ -947,7 +955,7 @@ function deactivebreak(target, breakIndex, sort, reverseIndex) end
 --- @param StackTurnAddRespectively boolean -- If true, add stack potency and turn count. If false, with buffs that don't have Count, add (stack + turn) potency to that buff. With buffs that have Count, inflict random X potency and Y count for that buff (X + Y = stack + turn)
 --- @param amount integer
 --- Inflicts potency and count based on buff category. Accept negative values.
-function bufcategory(MultiTarget, buffCategory, stack, turn, activeRound, StackTurnAddRespectively, amount) end
+function buffcategory(MultiTarget, buffCategory, stack, turn, activeRound, StackTurnAddRespectively, amount) end
 
 --- @param MultiTarget TargetMulti
 --- @param newValue integer
