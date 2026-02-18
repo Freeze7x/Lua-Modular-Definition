@@ -1,8 +1,8 @@
 ---@meta
 
 --[[
-    Version: 1.1.0
-    Modular Version: 4.3.8
+    Version: 1.1.1
+    Modular Version: 4.4.0
 --]]
 
 --#region Aliases
@@ -804,8 +804,12 @@ function battledialogline(target, dialog) end
 --- @param vfx string
 --- @param active ModularBoolean
 --- @param layerType "NONE"|"DIRECTION"|"ONCE"|"BACK"|"SKIN"
+--- @param isSetOverrideDie boolean
+--- @param isCenter boolean
+--- @param scale integer
+--- @param isAddScript boolean
 --- Toggles a visual effect label around the target.
-function effectlabel(target, vfx, active, layerType) end
+function effectlabel(target, vfx, active, layerType, isSetOverrideDie, isCenter, scale, isAddScript) end
 
 --- @param target TargetMulti
 --- @param active ModularBoolean
@@ -851,7 +855,7 @@ function lyrics(color, text) end
 --- Shows upper screen text in the UI with specified color.
 function uppertext(color, text) end
 
---- @param ... integer | "all" -- The coins to make unbreakable, -1 to target the coin this script is on.
+--- @param ... integer | "all" | -1  -- The coins to make unbreakable, -1 to target the coin this script is on (starts at 0). 
 --- Makes the specified coins unbreakable.
 function makeunbreakable(...) end
 
@@ -866,13 +870,13 @@ function stageextraslot(var1, add) end
 --- Modifies bloodfeast resource: add/sub/spend value. "spend" requires a target to consume for.
 function bloodfeast(mode, value, target) end
 
---- @param value integer -- Percent chance to add. (15 => +15% chance)
+--- @param value integer -- Percent chance to add. (15 → +15% chance)
 --- Add to the chance of a critical hit.
 function critchance(value) end
 
 --- @param defender "Defender" | TargetMulti
 --- @param defended "Defended" | TargetMulti
---- @param skillId integer -- Skill to defend with. Must be in the unit's defense skill list.
+--- @param skillId integer -- Skill to defend with. Must be in the defender's defense skill list.
 --- Defends a unit based on the parameters.\
 --- [NOTE] The defender Skill must have the Skill ability "SupportiveDefense", and the unit defending must have a buff with the ability "SupportProtect" (Mao Faust assist defense).
 function assistdefense(defender, defended, skillId) end
@@ -992,8 +996,8 @@ function clearvalues() end
 function resetadders() end
 
 --- @param selector string
---- @return string[] -- An array of inst ids, e.g. {"inst12","inst34"}
---- Takes a multi-target selector string and returns an array of selected targets (i.e. ["inst12", "inst34"]).\
+--- @return string[] -- A table of inst ids, e.g. {"inst12","inst34"}
+--- Takes a multi-target selector string and returns a table of the selected targets (i.e. ["inst12", "inst34"]).\
 --- Inst selectors are recognized by Modular, meaning you can pass them into consequence/value acquirers that accept target selectors.
 --- @nodiscard
 function selecttargets(selector) return {} end
