@@ -1,8 +1,8 @@
 ---@meta
 
 --[[
-    Version: 1.0.5
-    Modular Version: 4.2.1 (Probably)
+    Version: 1.0.6
+    Modular Version: 4.2.4
 --]]
 
 --#region Aliases
@@ -554,6 +554,11 @@ function coincancel(...) end
 --- Gives a skill slot to the target (Sinners only).
 function skillslotgive(target) end
 
+--- @param target TargetSample
+--- @param index integer --- Slot index to remove, starts at 1.
+--- Removes a skill slot from the target (Sinners only).
+function skillslotremove(target, index) end
+
 --- @param assistantId integer
 --- @param level integer
 --- @param uptie integer
@@ -606,7 +611,7 @@ function effectlabel(target, vfx, active, layerType) end
 
 --- @param target TargetSample
 --- @param active ModularBoolean
---- deploy the sensational superlative sanguine sancho shield. 🦅🦅🦅🦅🦅\
+--- deploy the sensational superlative sanguine sancho shield. (S.S.S.S.S.) 🦅🦅🦅🦅🦅\
 --- [NOTE] Only works for 8380_SanchoAppearance and 1079_Sancho_BerserkAppearance. Might not work for 10310_Donquixote_DarkSanchoAppearance.
 function sanchoshield(target, active) end
 
