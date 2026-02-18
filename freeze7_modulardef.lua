@@ -1,7 +1,7 @@
 ---@meta
 
 --[[
-    Version: 1.0.3
+    Version: 1.0.4
     Modular Version: 4.2.1 (Probably)
 --]]
 
@@ -43,10 +43,12 @@
 
 --#region Acquisition
 
---- @param getAs "normal" | "%" | "max" | "missing" | "missing%" -- Changes return value to match (Percents are rounded down).
+--- @param getAs "normal" | "%" | "max" | "missing" | "missing%" -- Changes return value to match.
 --- @param target TargetSample
 --- @return integer
---- Returns the HP value from a target.
+--- Returns the HP value from a target.\
+--- Percents are returned normalized to 100, and are rounded down.\
+--- Examples: 40% -> 40 | 45.3% -> 45 | 87.9% -> 87
 function hpcheck(target, getAs) return 0 end;
 
 --- @param target TargetSample
@@ -55,7 +57,7 @@ function hpcheck(target, getAs) return 0 end;
 function mpcheck(target) return 0 end;
 
 --- @param buffKeyword string
---- @param mode "stack" | "turn" | "+" | "*" | "consumed" -- potency, count, potency + count, potency × count, total consumed amount.
+--- @param mode "stack" | "turn" | "+" | "*" | "consumed" -- "stack" = Potency, "turn" = Count, "+" = potency + count, "*" = potency × count, "consumed" = total consumed amount.
 --- @param target TargetSample
 --- @return integer
 --- Returns a specified buff's property from a target.
@@ -75,12 +77,13 @@ function wave() return 0 end
 
 --- @return integer
 --- Returns the number of times this script has been called.\
---- First time = 0.
+--- First time = 0.\
+--- [NOTE] This will very likely always return 0 in lua scripts. Reason is unknown, but may be due to it "creating a new Modular script" when run.
 function activations() return 0 end
 
 --- @param target TargetSample
 --- @return -1 | 0 | 1 | 2 -- -1 if the unit doesn't exist, 0 if the unit is dead, 1 if the unit is alive, and 2 if the unit is staggered.
---- Returns the unit state as a number (-1, 0, 1, 2).
+--- Returns the unit state as an integer (-1, 0, 1, 2).
 function unitstate(target) return 0 end
 
 --- @param target TargetSample
@@ -253,7 +256,7 @@ function getdmgtaken(target, mode) return 0 end
 --- @param target TargetSample
 --- @param mode "neg" | "pos" -- Filter to only count positive or negative buffs.
 --- @return integer
---- Returns the count of buffs on the target, with optional filtering for negative/positive buffs.
+--- Returns the count of buffs of a type on the target.
 function getbuffcount(target, mode) return 0 end
 
 --- @param target TargetSample
@@ -347,17 +350,17 @@ function skillfixedtarget(target) return 0 end
 function log(msg, int) end
 
 --- @param target TargetSample
---- @param value integer
+--- @param damage integer
 --- @param atkType -1 | 0 | 1 | 2 -- True (-1) | Slash | Pierce | Blunt
 --- @param sinType -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 -- True (-1) | Wrath | Lust | Sloth | Gluttony | Gloom | Pride | Envy | White | Black | Red | Pale | Neutral
 --- Deals fixed sin affinity and attack type damage to the target.
-function bonusdmg(target, value, atkType, sinType) end
+function bonusdmg(target, damage, atkType, sinType) end
 
 --- @param target TargetSample
---- @param value integer
+--- @param amount integer
 --- [IMPORTANT] Despite its name, this will increase sanity rather than decrease it.\
 --- Heal/Damage SP on the target by the given value.
-function mpdmg(target, value) end
+function mpdmg(target, amount) end
 
 --- @param target TargetSample
 --- @param buffKeyword string
@@ -375,14 +378,14 @@ function buf(target, buffKeyword, potency, count, activeRound, consume) end
 function shield(target, amount, persist) end
 
 --- @param target TargetSample
---- @param value integer|string -- exact HP value or 'X%'.
+--- @param amount integer|string -- exact HP value or 'X%'.
 --- Heals HP on the specified target by value or percent. Negative values deal true HP damage (like bleed).
-function healhp(target, value) end
+function healhp(target, amount) end
 
 --- @param target TargetSample
---- @param value integer -- How many times to trigger.
+--- @param times integer -- How many times to trigger.
 --- Triggers Tremor Burst on the target.
-function explosion(target, value) end
+function explosion(target, times) end
 
 --- @param target TargetSample
 --- @param value integer
@@ -400,10 +403,10 @@ function breakREADMEIFTRYINGTOSTAGGERTARGET(target) end
 function breakrecover(target) end
 
 --- @param target TargetSample
---- @param value integer|string -- exact HP value or 'X%'.
+--- @param where integer|string -- exact HP value or 'X%'.
 --- Adds a new Stagger Threshold. Value may be an exact HP number or percent of max HP.\
 --- Setting above max HP causes stagger on next hit.
-function breakaddbar(target, value) end
+function breakaddbar(target, where) end
 
 --- @param value integer | "ADD" | "SUB" | "MUL"
 --- @param index? integer -- The index of the coin to be affected. If omitted, will affect all coins.
@@ -447,7 +450,7 @@ function changeskill(skillId) end
 
 --- @param ... integer Coin indices to reuse.
 --- Reuses the specified coin indices during the attack (-1 targets the coin script itself).\
---- May not work on OnSucceedAttack timing, wait for a fix.
+--- Using on their OnSucceedAttack timing will result in the coins being generated on attack start rather than appearing when reused.
 function reusecoin(...) end
 
 --- @param target TargetSample
@@ -463,8 +466,8 @@ function skillreuse(target) end
 
 --- @param attacker TargetSample
 --- @param victim TargetSample
---- @param skillId string|integer
---- @param defense? "def" Used to force defensive handling, provide this parameter if a defense skill does not work.
+--- @param skillId integer | string -- Any Skill ID, or S# and D# (e.g., S2, D1)
+--- @param defense? "def" Provide this parameter if sending a defense skill does not work.
 --- Sends a skill from attacker to victim.\
 --- The skill must exist in the attacker's arsenal.
 function skillsend(attacker, victim, skillId, defense) end
@@ -533,7 +536,7 @@ function resistreveal(target, bodyPartId, resType, resTypeType) end
 --- @param target TargetSample
 --- @param appearanceId integer | string
 --- Changes the appearance of the target.\
---- Note: This will always activate at combat start because of how the game handles visuals.
+--- [NOTE] This will always activate at combat start because of how the game handles visuals.
 function appearance(target, appearanceId) end
 
 --- @param ... integer -- Coin indices to cancel.
@@ -611,9 +614,9 @@ function retreat(target, buffKeyword) end
 function sound(type, toPlay) end
 
 --- @param target TargetSample
---- @param value integer
+--- @param amount integer
 --- Triggers Sinking Deluge.
-function surge(target, value) end
+function surge(target, amount) end
 
 --- @param target TargetSample
 --- @param ability string
@@ -661,7 +664,7 @@ function critchance(value) end
 --- @param defended "Defended" | TargetSample
 --- @param skillId integer -- Skill to defend with. Must be in the unit's defense skill list.
 --- Defends a unit based on the parameters.\
---- Note: The defender Skill must have the Skill ability "SupportiveDefense", and the unit defending must have a buff with the ability "SupportProtect" (Mao Faust assist defense).
+--- [NOTE] The defender Skill must have the Skill ability "SupportiveDefense", and the unit defending must have a buff with the ability "SupportProtect" (Mao Faust assist defense).
 function assistdefense(defender, defended, skillId) end
 
 --- @param value ModularBoolean
@@ -706,14 +709,17 @@ function setldata(target, dataId, value) end
 --- Gets encounter-persistent data from the target.
 function getldata(target, dataId) end
 
+--- Lua-exclusive consequence.\
 --- Clears the values of a Modular script.
 function clearvalues() end
 
+--- Lua-exclusive consequence.\
 --- Clears the adders of a Modular script.
 function resetadders() end
 
 --- @param selector string
 --- @return string[] -- An array of inst ids, e.g. {"inst12","inst34"}
+--- Lua-exclusive consequence.\
 --- Takes a multi-target selector string and returns an array of selected targets (i.e. ["inst12", "inst34"]).\
 --- Inst selectors are recognized by Modular, meaning you can pass them into consequence/value acquirers that accept target selectors.
 function selecttargets(selector) return {} end
