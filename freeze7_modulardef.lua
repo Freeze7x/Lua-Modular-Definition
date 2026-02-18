@@ -1,8 +1,8 @@
 ---@meta
 
 --[[
-    Version: 1.0.7
-    Modular Version: 4.3.0
+    Version: 1.0.8
+    Modular Version: 4.3.5
 --]]
 
 --#region Aliases
@@ -27,6 +27,11 @@
 ---| "Penetrate"
 ---| "Slash"
 
+---@alias AttackTypeCaps
+---| "HIT"
+---| "PENETRATE"
+---| "SLASH"
+
 ---@alias SinRes
 ---| "resCRIMSON"
 ---| "resSCARLET"
@@ -44,6 +49,35 @@
 ---| "Self"
 ---| "MainTarget"
 ---| string
+
+---@alias BuffCategory
+---| "Neutral"
+---| "Positive"
+---| "Negative"
+---| "SIN"
+---| "RESOURCE"
+---| "SHIELD_MANAGER"
+---| "BREATH"
+---| "CHARGE"
+---| "COMBUSTION"
+---| "LACERATION"
+---| "VIBRATION"
+---| "BURST"
+---| "SINKING"
+---| "BULLET"
+---| "CAN_GET_ONLY_BY_SYSTEM"
+---| "AACFPBBCA"
+---| "FREISHUTZ_OUTIS_EGO_BULLET"
+---| "DUEL_DECLARATION"
+---| "CONCENTRATED_ATTACK"
+---| "DIANXUE"
+---| "BURSTREACTIVE"
+---| "IGNORE_CHECED_CORRECTION_EXCLUSION"
+---| "TURN_IS_ALSO_LOADED_BULLET"
+---| "VIBRATION_CONVERTED"
+---| "VIBRATION_MERGED"
+---| "SUPPORTIVE_PROTECT"
+
 
 --#endregion
 
@@ -219,12 +253,12 @@ function getskilllevel(target) return 0 end
 function skillatk(target) return 0 end
 
 --- @param target TargetSample
---- @return 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 -- 0 = Wrath, 1 = Lust, 2 = Sloth, 3 = Gluttony, 4 = Gloom, 5 = Pride, 6 = Envy, 7 = White, 8 = Black, 9 = Red, 10 = Pale, 11 = Neutral.
+--- @return 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 -- 0 = Wrath | 1 = Lust | 2 = Sloth | 3 = Gluttony | 4 = Gloom | 5 = Pride | 6 = Envy | 7 = White | 8 = Black | 9 = Red | 10 = Pale | 11 = Neutral
 --- Returns the current skill's sin affinity as an integer between 0 and 11.
 function skillattribute(target) return 0 end
 
 --- @param target TargetSample
---- @return 0 | 1 | 2 | 3 | 4 | 5 -- 0 = None, 1 = Guard, 2 = Evade, 3 = Counter, 4 = Attack, 5 = Non Action
+--- @return 0 | 1 | 2 | 3 | 4 | 5 -- 0 = None | 1 = Guard | 2 = Evade | 3 = Counter | 4 = Attack | 5 = Non Action
 --- Returns the current skill's defense type (if any).
 function skilldeftype(target) return 0 end
 
@@ -234,8 +268,8 @@ function skilldeftype(target) return 0 end
 function skillrank(target) return 0 end
 
 --- @param target TargetSample
---- @return 0 | 1 | 2 | 3 | 4 | 5 | 6 -- 0 = Skill, 1 = Awaken, 2 = Corrosion, 3 = Corrosion Unstable, 4 = Corrosion Stable, 5 = Upgrade, 6 = None.
---- Returns the current skill's Ego Type (if any).
+--- @return 0 | 1 | 2 | 3 | 4 | 5 | 6 -- 0 = Skill | 1 = Awaken | 2 = Corrosion | 3 = Corrosion Unstable | 4 = Corrosion Stable | 5 = Upgrade | 6 = None
+--- Returns the current skill's E.G.O. type (if any).
 function skillegotype(target) return 0 end
 
 --- @param target TargetSample
@@ -348,6 +382,35 @@ function skillteamkill(target) return 0 end
 --- @return ModularBoolean
 --- Returns whether the target's skill cannot be redirected.
 function skillfixedtarget(target) return 0 end
+
+--- @param target TargetSample
+--- @return 1 | 2 | 3 -- 1 = ADD | 2 = SUB | 3 = MUL
+--- Returns an integer representing the coin's operator type.
+function coinoperator(target, coinIndex) return 1 end
+
+--- @param keyword string
+--- @return 0 | 1 | 2 -- 0 = Neutral | 1 = Positive | 2 = Negative
+--- Returns an integer representing the buff's type.
+function bufftype(keyword) return 1 end
+
+--- @param target TargetSample
+--- @param atkType AttackTypeCaps
+--- @return integer
+--- Return an integer (normalized to 0~200) that represents the resistance to an attack type. (Doesn't work for abnormalities)\
+--- (e.g., x0.75 -> 75).
+function getatkres(target, atkType) return 0 end;
+
+--- Return an integer (normalized to 0~200) that represents the resistance to a sin affinity. (Doesn't work for abnormalities)\
+--- (e.g., x0.67 -> 67).
+--- @param target TargetSample
+--- @param sin Sin
+--- @return integer
+function getsinres(target, sin) return 0 end;
+
+--- Returns whether the unit used a defense skill or not this turn.
+--- @param target TargetSample
+--- @return ModularBoolean
+function useddefaction(target) return 0 end;
 
 --#endregion
 
@@ -469,7 +532,7 @@ function reusecoin(...) end
 --- @param target TargetSample
 --- @param value integer
 --- @param turn? "this" | "next" -- Default: "next"
---- @param slotApplication? -2 | -1 | integer -2 = Slot this script is used on, -1 = All slots, >=0 = A specific slot index.
+--- @param slotApplication? -2 | -1 | integer -2 = Slot this script is used on | -1 = All slots | 0 or greater = A specific slot index.
 --- Adds aggro to the target across slots.
 function aggro(target, value, turn, slotApplication) end
 
@@ -504,7 +567,7 @@ function setslotadder(target, value) end
 --- Adds/Subtracts from the available sin resources.
 function resource(type, amount, enemy) return 0 end;
 
---- @param mode "DESCENDING"|"ASCENDING"|"RANDOM" -- "DESCENDING" = highest tier, "ASCENDING" = lowest tier
+--- @param mode "DESCENDING"|"ASCENDING"|"RANDOM" -- "DESCENDING" = highest tier | "ASCENDING" = lowest tier
 --- @param amount integer
 --- Discards skills from the target.
 function discard(mode, amount) end
@@ -703,6 +766,63 @@ function changemotion(motionType, motionIndex) end
 --- This works best on the "OnStartBehaviour" timing, but may be usable in other timings as well.
 function changeaffinity(motionType) end
 
+--- @param target TargetSample
+--- @param atkType AttackTypeCaps
+--- @param newValue integer -- 0..200 (game uses newValue/100)
+--- @param add? any -- if provided, add newValue to existing resistance instead of overriding.
+--- Override an attack resistance value for the selected targets.
+function ovwatkres(target, atkType, newValue, add) end
+
+--- @param target TargetSample
+--- @param sinType Sin
+--- @param newValue integer -- 0..200 (game uses newValue/100)
+--- @param add? any -- if provided, add newValue to existing resistance instead of overriding.
+--- Override a sin resistance value for the selected targets.
+function ovwsinres(target, sinType, newValue, add) end
+
+--- @param target TargetSample
+--- Refreshes the target's speed. Useful after applying MaxSpeedAdder/MinSpeedAdder system abilities.
+function refreshspeed(target) end
+
+--- @param target TargetSample
+--- @param keyword string -- The buff keyword to destroy.
+--- @param destroyRound 0 | 1 | 2 -- This Turn | Next Turn | Both
+--- Destroy buff(s) on targets.
+function destroybuff(target, keyword, destroyRound) end
+
+--- @param target TargetSample
+--- @param mode BuffCategory
+--- @param destroyRound 0 | 1 | 2 -- This Turn | Next Turn | Both
+--- @param amount integer -- Number of buffs to pick randomly and destroy (>= 0)
+--- @param includeCantBeDespelled? any -- If provided, include buffs with canBeDespelled = false
+--- Destroy buff(s) on targets.
+function destroybuff(target, mode, destroyRound, amount, includeCantBeDespelled) end
+
+--- @param target TargetSample
+--- @param breakIndex integer -- Index of the stagger bar (starts at 0). Use -1 to deactivate all stagger bars.
+--- @param sort boolean -- If true, sort the active stagger bars list in descending order before deactivation.
+--- @param reverseIndex? any -- Optional. If provided, the active stagger bars list is reversed before indexing (index still starts at 0).
+--- Deactivates one or all active stagger bars on selected targets.
+function deactivebreak(target, breakIndex, sort, reverseIndex) end
+
+--- @param MultiTarget TargetSample
+--- @param buffCategory BuffCategory
+--- @param stack integer
+--- @param turn integer
+--- @param activeRound 0 | 1 | 2 -- This Turn | Next Turn | Both
+--- @param StackTurnAddRespectively boolean -- If true, add stack potency and turn count. If false, with buffs that don't have Count, add (stack + turn) potency to that buff. With buffs that have Count, inflict random X potency and Y count for that buff (X + Y = stack + turn)
+--- @param amount integer
+--- Inflicts potency and count based on buff category. Accept negative values.
+function bufcategory(MultiTarget, buffCategory, stack, turn, activeRound, StackTurnAddRespectively, amount) end
+
+--- @param MultiTarget TargetSample
+--- @param newValue integer
+--- Sets the unit's defense correction.
+function defcorrection(MultiTarget, newValue) end
+--#endregion
+
+--#region Buff Exclusive
+
 --- @param value? integer
 --- @return integer
 --- Buff-exclusive consequence.\
@@ -716,12 +836,13 @@ function stack(value) return 0 end
 --- Returns the count of buff.
 function turn(value) return 0 end
 
+--#endregion
+
 --#region Lua Exclusive
 
 --- @param target TargetSample
 --- @param dataId string
 --- @param value any
---- Lua-exclusive function.\
 --- Sets encounter-persistent data to the target that can be retrieved using getldata().
 --- @see getldata
 function setldata(target, dataId, value) end
@@ -729,39 +850,70 @@ function setldata(target, dataId, value) end
 --- @param target TargetSample
 --- @param dataId string
 --- @return any
---- Lua-exclusive function.\
 --- Gets encounter-persistent data from the target that was set using setldata().
 --- @see setldata
 function getldata(target, dataId) end
 
---- Lua-exclusive function.\
 --- Clears the values of a Modular script.
 function clearvalues() end
 
---- Lua-exclusive function.\
 --- Clears the adders of a Modular script.
 function resetadders() end
 
 --- @param selector string
 --- @return string[] -- An array of inst ids, e.g. {"inst12","inst34"}
---- Lua-exclusive function.\
 --- Takes a multi-target selector string and returns an array of selected targets (i.e. ["inst12", "inst34"]).\
 --- Inst selectors are recognized by Modular, meaning you can pass them into consequence/value acquirers that accept target selectors.
 function selecttargets(selector) return {} end
 
 --- @param directory string -- Path of the directory (i.e. "Lethe")
 --- @return string[]
---- Lua-exclusive function.\
 --- Lists all files in a directory.\
---- Files outside off the Plugins folder cannot be accessed.
+--- Files outside of the Plugins folder cannot be accessed.
 function listfiles(directory) return {} end
+
+--- @param directory string -- Path of the directory (i.e. "Lethe")
+--- @return string[]
+--- Lists all folders in a directory.\
+--- This function does not list files.\
+--- Files outside of the Plugins folder cannot be accessed.\
+--- @see listfiles
+function listdirectories(directory) return {} end
+
+--- @param target string
+--- @return string[]
+--- Returns all the buffs' keyword that the target has.
+function listbuffs(target) return {} end
+
+--- @param key string
+--- @param value any
+--- Sets a global value that can be retrieved using getgdata().\
+--- This value persists until the client is closed.\
+--- @see getgdata
+function setgdata(key, value) end;
+
+--- @param key string
+--- @return any
+--- Gets a global value that was set using setgdata().\
+--- This value persists until the client is closed.\
+--- @see setgdata
+function getgdata(key) return {} end;
+
+--- Clears all global data.\
+--- @see setgdata
+--- @see getgdata
+function clearallgdata() end;
 
 --- @param directory string -- Path of the file (i.e. "Lethe/modularcodesecrets.txt")
 --- @return string
---- Lua-exclusive function.\
 --- Reads the contents of a file.\
---- Files outside off the Plugins folder cannot be accessed.
+--- Files outside of the Plugins folder cannot be accessed.
 function readfile(directory) return "" end
+
+--- @return table
+--- @param string string
+--- Turn a string of json into a lua table.
+function jsontolua(string) return {} end
 
 --#endregion
 
