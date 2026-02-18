@@ -1,7 +1,7 @@
 ---@meta
 
 --[[
-    Version: 1.0.1
+    Version: 1.0.2
     Modular Version: 4.2.1 (Probably)
 --]]
 
@@ -369,10 +369,10 @@ function mpdmg(target, value) end
 function buf(target, buffKeyword, potency, count, activeRound, consume) end
 
 --- @param target TargetSample
---- @param times integer
+--- @param amount integer
 --- @param persist? "perm" -- Prevents the shield from decaying at round end.
 --- Applies shield to the target.
-function shield(target, times, persist) end
+function shield(target, amount, persist) end
 
 --- @param target TargetSample
 --- @param value integer|string -- exact HP value or 'X%'.
