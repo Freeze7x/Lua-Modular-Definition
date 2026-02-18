@@ -1,7 +1,7 @@
 ---@meta
 
 --[[
-    Version: 1.0.4
+    Version: 1.0.5
     Modular Version: 4.2.1 (Probably)
 --]]
 
@@ -76,9 +76,9 @@ function round() return 0 end
 function wave() return 0 end
 
 --- @return integer
---- Returns the number of times this script has been called.\
+--- [NOTE] This is believed to always return 0 in Lua scripts.\
+--- Returns the number of times a Modular script has been called.\
 --- First time = 0.\
---- [NOTE] This will very likely always return 0 in lua scripts. Reason is unknown, but may be due to it "creating a new Modular script" when run.
 function activations() return 0 end
 
 --- @param target TargetSample
@@ -115,7 +115,10 @@ function getpattern(target) return 0 end
 --- @param dataId integer
 --- @param target TargetSample
 --- @return integer
---- Get encounter-persistent data from the target.
+--- Gets encounter-persistent numeric data from the target that was set using setdata().\
+--- If the data will not be used outside of the Lua scope (i.e., in Modular scripts),\
+--- it is preferable to use setldata() and getldata() instead.
+--- @see setdata
 function getdata(target, dataId) return 0 end
 
 --- @param target TargetSample
@@ -134,8 +137,8 @@ function random(min, max) return 0 end
 --- Returns the current shield amount on the target.
 function getshield(target) return 0 end
 
---- @param target2 TargetSample
 --- @param target1 TargetSample
+--- @param target2 TargetSample
 --- @return ModularBoolean
 --- Returns whether two targets are allied (1) or enemies (0).
 function areallied(target1, target2) return 0 end
@@ -211,7 +214,7 @@ function skillatk(target) return 0 end
 
 --- @param target TargetSample
 --- @return 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 -- 0 = Wrath, 1 = Lust, 2 = Sloth, 3 = Gluttony, 4 = Gloom, 5 = Pride, 6 = Envy, 7 = White, 8 = Black, 9 = Red, 10 = Pale, 11 = Neutral.
---- Returns the current skill's sin affinity.
+--- Returns the current skill's sin affinity as an integer between 0 and 11.
 function skillattribute(target) return 0 end
 
 --- @param target TargetSample
@@ -360,6 +363,7 @@ function bonusdmg(target, damage, atkType, sinType) end
 --- @param amount integer
 --- [IMPORTANT] Despite its name, this will increase sanity rather than decrease it.\
 --- Heal/Damage SP on the target by the given value.
+--- Do not use this on the "IgnorePanic" timing, as it will crash the game due to recursion.
 function mpdmg(target, amount) end
 
 --- @param target TargetSample
@@ -394,7 +398,7 @@ function explosion(target, times) end
 function breakdmg(target, value, times) end
 
 --- @param target TargetSample
---- Because break is a reserved word in lua for breaking out of a loop, the break() modular function cannot work in lua.\
+--- Because break is a reserved word in Lua for breaking out of a loop, the break() modular function cannot work in Lua.\
 --- DO NOT TRY TO USE THIS FUNCTION AS AN ALTERNATIVE, IT IS HERE FOR INFORMATION ONLY.
 function breakREADMEIFTRYINGTOSTAGGERTARGET(target) end
 
@@ -440,7 +444,10 @@ function pattern(value) end
 --- @param target TargetSample
 --- @param dataId integer
 --- @param value integer
---- Sets encounter-persistent numeric data on the target for the given dataId.
+--- Sets encounter-persistent numeric data to the target that was set using setdata().\
+--- If the data will not be used outside of the Lua scope (i.e., in Modular scripts),\
+--- it is preferable to use setldata() and getldata() instead.
+--- @see getdata
 function setdata(target, dataId, value) end
 
 --- @param skillId integer
@@ -698,28 +705,30 @@ function turn(value) return 0 end
 --- @param target TargetSample
 --- @param dataId string
 --- @param value any
---- Lua-exclusive consequence.\
---- Sets encounter-persistent data from the target.
+--- Lua-exclusive function.\
+--- Sets encounter-persistent data to the target that can be retrieved using getldata().
+--- @see getldata
 function setldata(target, dataId, value) end
 
 --- @param target TargetSample
 --- @param dataId string
 --- @return any
---- Lua-exclusive consequence.\
---- Gets encounter-persistent data from the target.
+--- Lua-exclusive function.\
+--- Gets encounter-persistent data from the target that was set using setldata().
+--- @see setldata
 function getldata(target, dataId) end
 
---- Lua-exclusive consequence.\
+--- Lua-exclusive function.\
 --- Clears the values of a Modular script.
 function clearvalues() end
 
---- Lua-exclusive consequence.\
+--- Lua-exclusive function.\
 --- Clears the adders of a Modular script.
 function resetadders() end
 
 --- @param selector string
 --- @return string[] -- An array of inst ids, e.g. {"inst12","inst34"}
---- Lua-exclusive consequence.\
+--- Lua-exclusive function.\
 --- Takes a multi-target selector string and returns an array of selected targets (i.e. ["inst12", "inst34"]).\
 --- Inst selectors are recognized by Modular, meaning you can pass them into consequence/value acquirers that accept target selectors.
 function selecttargets(selector) return {} end
