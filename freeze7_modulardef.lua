@@ -1,7 +1,7 @@
 ---@meta
 
 --[[
-    Version: 1.0.2
+    Version: 1.0.3
     Modular Version: 4.2.1 (Probably)
 --]]
 
@@ -405,10 +405,10 @@ function breakrecover(target) end
 --- Setting above max HP causes stagger on next hit.
 function breakaddbar(target, value) end
 
---- @param value integer
---- @param operatorChangeOrIndex "ADD" | "SUB" | "MUL" | integer -- If this is an integer, chooses a specific coin.
---- Modifies coin scale/power or operator type. value adds/subtracts coin power; operatorChangeOrIndex can change operator type ("ADD"/"SUB"/"MUL") or target a specific coin index.
-function scale(value, operatorChangeOrIndex) end
+--- @param value integer | "ADD" | "SUB" | "MUL"
+--- @param index? integer -- The index of the coin to be affected. If omitted, will affect all coins.
+--- Add/Subtract coin power from current skill, or change the operatorType of the coins.
+function scale(value, index) end
 
 --- @param value integer
 --- Add/Subtract base power from current skill.
