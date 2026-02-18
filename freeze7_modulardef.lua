@@ -1,8 +1,8 @@
 ---@meta
 
 --[[
-    Version: 1.1.3
-    Modular Version: 4.5.2
+    Version: 1.1.4
+    Modular Version: 4.5.3
 --]]
 
 --#region Aliases
@@ -141,13 +141,14 @@ function areallied(target1, target2) return 0 end;
 --- @see getallcoinstates
 function allcoinstate(target, get) return 0 end;
 
---- @see getresonance
 --- @deprecated
+--- @see getresonance
 function resonance(type) return 0 end;
 
 --- @deprecated
 --- @see getresource
-function resource(type, enemy) return 0 end;
+--- @see addresource
+function resource(type, amountOrEnemy, enemy) return 0 end;
 
 --- @deprecated
 --- @see getskillbase
@@ -407,6 +408,13 @@ function areallies(target1, target2) return 0 end
 --- Will not work on timings that do not have skills being used.
 --- @nodiscard
 function getskillid() return 0 end
+
+--- @param target TargetSingle
+--- @param passiveId TargetSingle
+--- @return ModularBoolean
+--- Checks if the unit has the specified passive via ID.\
+--- @nodiscard
+function haspassive(target, passiveId) return 0 end
 
 --- @param target TargetSingle
 --- @param get "cur" | "og" -- Current coin count | Original coin count
@@ -894,7 +902,7 @@ function setslotadder(target, value) end
 --- @param enemy? "Enemy" -- Adjust the enemy's resources instead. This is only used during Envy Peccatulum battles as of yet.
 --- @return integer
 --- Adds/Subtracts from the available sin resources.
-function resource(type, amount, enemy) return 0 end;
+function addresource(type, amount, enemy) return 0 end;
 
 --- @param mode "DESCENDING"|"ASCENDING"|"RANDOM" -- "DESCENDING" = highest tier | "ASCENDING" = lowest tier
 --- @param amount integer
@@ -903,8 +911,9 @@ function discard(mode, amount) end
 
 --- @param target TargetMulti
 --- @param passiveId integer
+--- @param dupe? "nodupe" | "yesdupe" -- Default is "yesdupe". If "nodupe", will not add the passive if the unit has it already.
 --- Adds a passive to the selected units by passive id.
-function passiveadd(target, passiveId) end
+function passiveadd(target, passiveId, dupe) end
 
 --- @param target TargetMulti
 --- @param passiveId integer
