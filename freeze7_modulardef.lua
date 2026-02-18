@@ -1,8 +1,8 @@
 ---@meta
 
 --[[
-    Version: 1.0.9
-    Modular Version: 4.3.6
+    Version: 1.1.0
+    Modular Version: 4.3.8
 --]]
 
 --#region Aliases
@@ -89,13 +89,11 @@
 ---| "VIBRATION_MERGED"
 ---| "SUPPORTIVE_PROTECT"
 
-
 --#endregion
 
 --#region Acquisition
 
-
---- @param getAs "normal" | "%" | "max" | "missing" | "missing%" -- Changes return value to match.
+--- @param getAs "normal" | "%" | "max" | "missing" | "missing%"
 --- @param target TargetSingle
 --- @return integer
 --- Returns the HP value from a target.\
@@ -106,7 +104,8 @@ function hpcheck(target, getAs) return 0 end;
 
 --- @param target TargetSingle
 --- @return integer
---- Returns the MP/SP value from a target.
+--- Returns the MP/SP value from a target.\
+--- Abnormalities will always return 0.
 --- @nodiscard
 function mpcheck(target) return 0 end;
 
@@ -141,8 +140,12 @@ function wave() return 0 end
 function activations() return 0 end
 
 --- @param target TargetSingle
---- @return -1 | 0 | 1 | 2 -- -1 if the unit doesn't exist, 0 if the unit is dead, 1 if the unit is alive, and 2 if the unit is staggered.
---- Returns the unit state as an integer (-1, 0, 1, 2).
+--- @return -1 | 0 | 1 | 2
+--- Returns the unit state as an integer.\
+--- -1: Unit doesn't exist.\
+--- 0: Unit is dead.\
+--- 1: Unit is alive.\
+--- 2: Unit is staggered.
 --- @nodiscard
 function unitstate(target) return 0 end
 
@@ -226,11 +229,18 @@ function getskillid() return 0 end
 --- @nodiscard
 function getcoincount(target, get) return 0 end
 
---- @param get "full" | "headcount" | "tailcount"
+--- @param get "headcount" | "tailcount"
 --- @param target TargetSingle
 --- @return integer
---- Returns how many coins flipped a specific side.\
---- "full" will return 1 if all Heads, 2 if all Tails, and 0 if mixed.
+--- Returns how many coins flipped a specific side.
+--- @nodiscard
+function allcoinstate(target, get) return 0 end
+
+--- @param get "full"
+--- @param target TargetSingle
+--- @return 0 | 1 | 2
+--- Returns if all the coins matched the same side, as well as what side they all matched.\
+--- 0: Mixed | 1: All Heads | 2: All Tails
 --- @nodiscard
 function allcoinstate(target, get) return 0 end
 
@@ -269,40 +279,43 @@ function skillbase(target) return 0 end
 function skillatkweight(target) return 0 end
 
 --- @param target TargetSingle
---- @param coinIndex integer
+--- @param coinIndex integer -- The coin to get the coin power forww
 --- @return integer
---- Returns the current skill's coin power at the given index.
+--- Returns the current skill's coin power.
 --- @nodiscard
 function onescale(target, coinIndex) return 0 end
 
 --- @param target TargetSingle
 --- @param coinIndex integer
 --- @return integer
---- Returns the current skill's offense correction (+5, -5, +3, etc.).
+--- Returns the current skill's level correction (+5, -5, +3, etc.).
 --- @nodiscard
 function skillatklevel(target, coinIndex) return 0 end
 
 --- @param target TargetSingle
 --- @return integer
---- Returns the current skill's offense correction + the unit's offense level.
+--- Returns the current skill's level correction + the unit's offense level.
 --- @nodiscard
 function getskilllevel(target) return 0 end
 
 --- @param target TargetSingle
---- @return 0 | 1 | 2 | 3 -- 0 = Slash, 1 = Pierce, 2 = Blunt, 3 = None
---- Returns the current skill's attack type.
+--- @return 0 | 1 | 2 | 3
+--- Returns the current skill's attack type.\
+--- 0: Slash | 1: Pierce | 2: Blunt | 3: None
 --- @nodiscard
 function skillatk(target) return 0 end
 
 --- @param target TargetSingle
---- @return 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 -- 0 = Wrath | 1 = Lust | 2 = Sloth | 3 = Gluttony | 4 = Gloom | 5 = Pride | 6 = Envy | 7 = White | 8 = Black | 9 = Red | 10 = Pale | 11 = Neutral
---- Returns the current skill's sin affinity as an integer between 0 and 11.
+--- @return 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11
+--- Returns the current skill's sin affinity as an integer between 0 and 11.\
+--- 0: Wrath | 1: Lust | 2: Sloth | 3: Gluttony | 4: Gloom | 5: Pride | 6: Envy | 7: White | 8: Black | 9: Red | 10: Pale | 11: Neutral
 --- @nodiscard
 function skillattribute(target) return 0 end
 
 --- @param target TargetSingle
---- @return 0 | 1 | 2 | 3 | 4 | 5 -- 0 = None | 1 = Guard | 2 = Evade | 3 = Counter | 4 = Attack | 5 = Non Action
---- Returns the current skill's defense type (if any).
+--- @return 0 | 1 | 2 | 3 | 4 | 5
+--- Returns the current skill's defense type (if any).\
+--- 0: None | 1: Guard | 2: Evade | 3: Counter | 4: Attack | 5: Non-Action
 --- @nodiscard
 function skilldeftype(target) return 0 end
 
@@ -313,8 +326,9 @@ function skilldeftype(target) return 0 end
 function skillrank(target) return 0 end
 
 --- @param target TargetSingle
---- @return 0 | 1 | 2 | 3 | 4 | 5 | 6 -- 0 = Skill | 1 = Awaken | 2 = Corrosion | 3 = Corrosion Unstable | 4 = Corrosion Stable | 5 = Upgrade | 6 = None
---- Returns the current skill's E.G.O. type (if any).
+--- @return 0 | 1 | 2 | 3 | 4 | 5 | 6
+--- Returns the current skill's E.G.O. type (if any).\
+--- 0: Skill | 1: Awaken | 2: Corrosion | 3: Corrosion Unstable | 4: Corrosion Stable | 5: Upgrade | 6: None
 --- @nodiscard
 function skillegotype(target) return 0 end
 
@@ -421,7 +435,8 @@ function isunbreakable(target) return 0 end
 
 --- @param target TargetSingle
 --- @return ModularBoolean
---- Returns if the coin this script is attached to is usable in a clash.
+--- Returns if the coin this script is attached to is usable in a clash.\
+--- 1 if uncracked, and 0 if cracked.
 --- @nodiscard
 function isusableinduel(target) return 0 end
 
@@ -440,7 +455,7 @@ function skillcanduel(target) return 0 end
 
 --- @param target TargetSingle
 --- @return ModularBoolean
---- Returns whether the target's skill can kill their allies.
+--- Returns whether the target's skill can target their allies.
 --- @nodiscard
 function skillteamkill(target) return 0 end
 
@@ -451,14 +466,16 @@ function skillteamkill(target) return 0 end
 function skillfixedtarget(target) return 0 end
 
 --- @param target TargetSingle
---- @return 1 | 2 | 3 -- 1 = ADD | 2 = SUB | 3 = MUL
---- Returns an integer representing the coin's operator type.
+--- @return 1 | 2 | 3
+--- Returns an integer representing the coin's operator type.\
+--- 1: Plus Coin | 2: Minus Coin | 3: Multiply Coin
 --- @nodiscard
 function coinoperator(target, coinIndex) return 1 end
 
 --- @param keyword string
---- @return 0 | 1 | 2 -- 0 = Neutral | 1 = Positive | 2 = Negative
---- Returns an integer representing the buff's type.
+--- @return 0 | 1 | 2
+--- Returns an integer representing the buff's type.\
+--- 0: Neutral | 1: Positive | 2: Negative
 --- @nodiscard
 function bufftype(keyword) return 1 end
 
@@ -483,6 +500,46 @@ function getsinres(target, sin) return 0 end;
 --- Returns whether the unit used a defense skill or not this turn.
 --- @nodiscard
 function useddefaction(target) return 0 end;
+
+--- @return 0 | 1 | 2 |3
+--- Returns an integer representing the status of the chain of skills on the dashboard.\
+--- 0: No skills could be found.\
+--- 1: Only Offensive (Attack/Counter) skills are chained.\
+--- 2: Only Defensive (Guard/Evade) skills are chained.\
+--- 3: Both Offensive and Defensive skills are chained.
+--- @nodiscard
+function chainstatus() return 0 end;
+
+--- @return 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+--- Returns an integer representing where the buff came from.\
+--- 0: No source\
+--- 1: Skill effect\
+--- 2: Event\
+--- 3: Another buff\
+--- 4: Passive\
+--- 5: System Ability\
+--- 6: E.G.O. Gift\
+--- 7: Pattern\
+--- 8: Stage effect\
+--- 9: A unit.
+--- @nodiscard
+function gbsource() return 0 end;
+
+--- @return integer
+--- Returns how much potency the gained buff received.
+--- @nodiscard
+function gbstack() return 0 end;
+
+--- @return integer
+--- Returns how much count the gained buff received.
+--- @nodiscard
+function gbturn() return 0 end;
+
+--- @return 0 | 1 | 2
+--- Returns the ActiveRound of the buff\
+--- 0: This Turn | 1: Next Turn | 2: Both
+--- @nodiscard
+function gbturn() return 0 end;
 
 --#endregion
 
@@ -539,9 +596,9 @@ function explosion(target, times) end
 function breakdmg(target, value, times) end
 
 --- @param target TargetMulti
---- Because break is a reserved word in Lua for breaking out of a loop, the break() modular function cannot work in Lua.\
---- DO NOT TRY TO USE THIS FUNCTION AS AN ALTERNATIVE, IT IS HERE FOR INFORMATION ONLY.
-function breakREADMEIFTRYINGTOSTAGGERTARGET(target) end
+--- This function does not work. Do not use it.
+--- "break" is a reserved word in Lua for breaking out of a loop, so the function cannot be called.\
+function _break(target) end
 
 --- @param target TargetMulti
 --- Recover from stagger.
@@ -892,6 +949,7 @@ function bufcategory(MultiTarget, buffCategory, stack, turn, activeRound, StackT
 --- @param newValue integer
 --- Sets the unit's defense correction.
 function defcorrection(MultiTarget, newValue) end
+
 --#endregion
 
 --#region Buff Exclusive
@@ -994,7 +1052,5 @@ function readfile(directory) return "" end
 --- Turn a string of json into a lua table.
 --- @nodiscard
 function jsontolua(string) return {} end
-
---#endregion
 
 --#endregion
