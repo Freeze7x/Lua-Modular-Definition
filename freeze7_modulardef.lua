@@ -1,7 +1,7 @@
 ---@meta
 
 --[[
-    Version: 1.0.0
+    Version: 1.0.1
     Modular Version: 4.2.1 (Probably)
 --]]
 
@@ -36,7 +36,7 @@
 
 ---@alias TargetSample
 ---| "Self"
----| "Target"
+---| "MainTarget"
 ---| string
 
 --#endregion
