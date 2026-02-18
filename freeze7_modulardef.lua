@@ -1,8 +1,8 @@
 ---@meta
 
 --[[
-    Version: 1.0.6
-    Modular Version: 4.2.4
+    Version: 1.0.7
+    Modular Version: 4.3.0
 --]]
 
 --#region Aliases
@@ -15,6 +15,12 @@
 ---| "AZURE"
 ---| "INDIGO"
 ---| "VIOLET"
+
+---@alias Virtues
+---| "RED"
+---| "WHITE"
+---| "BLACK"
+---| "PALE"
 
 ---@alias AttackType
 ---| "Hit"
@@ -692,6 +698,11 @@ function ignorebreak(value) end
 --- Changes a skill's motion/animation type and index (e.g., S1..S20 and index).
 function changemotion(motionType, motionIndex) end
 
+--- @param motionType Sin | Virtues
+--- Changes the Sin Affinity of a skill on the usage of said Skill.\
+--- This works best on the "OnStartBehaviour" timing, but may be usable in other timings as well.
+function changeaffinity(motionType) end
+
 --- @param value? integer
 --- @return integer
 --- Buff-exclusive consequence.\
@@ -737,6 +748,20 @@ function resetadders() end
 --- Takes a multi-target selector string and returns an array of selected targets (i.e. ["inst12", "inst34"]).\
 --- Inst selectors are recognized by Modular, meaning you can pass them into consequence/value acquirers that accept target selectors.
 function selecttargets(selector) return {} end
+
+--- @param directory string -- Path of the directory (i.e. "Lethe")
+--- @return string[]
+--- Lua-exclusive function.\
+--- Lists all files in a directory.\
+--- Files outside off the Plugins folder cannot be accessed.
+function listfiles(directory) return {} end
+
+--- @param directory string -- Path of the file (i.e. "Lethe/modularcodesecrets.txt")
+--- @return string
+--- Lua-exclusive function.\
+--- Reads the contents of a file.\
+--- Files outside off the Plugins folder cannot be accessed.
+function readfile(directory) return "" end
 
 --#endregion
 
