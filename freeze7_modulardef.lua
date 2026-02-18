@@ -1,8 +1,8 @@
 ---@meta
 
 --[[
-    Version: 1.1.4
-    Modular Version: 4.5.3
+    Version: 1.1.5
+    Modular Version: 4.6.1
 --]]
 
 --#region Aliases
@@ -59,6 +59,8 @@
 ---| "All"
 ---| "adjLeft"
 ---| "adjRight"
+---| "SelfParts"
+---| "TargetParts"
 ---| string
 
 ---@alias BuffCategory
@@ -1148,15 +1150,22 @@ function destroybuff(target, mode, destroyRound, amount, includeCantBeDespelled)
 --- Deactivates one or all active stagger bars on selected targets.
 function deactivebreak(target, breakIndex, sort, reverseIndex) end
 
---- @param MultiTarget TargetMulti
+--- @param target TargetMulti
 --- @param buffCategory BuffCategory
 --- @param stack integer
 --- @param turn integer
 --- @param activeRound 0 | 1 | 2 -- This Turn | Next Turn | Both
---- @param StackTurnAddRespectively boolean -- If true, add stack potency and turn count. If false, with buffs that don't have Count, add (stack + turn) potency to that buff. With buffs that have Count, inflict random X potency and Y count for that buff (X + Y = stack + turn)
+--- @param stackTurnAddRespectively boolean -- If true, add stack potency and turn count. If false, with buffs that don't have Count, add (stack + turn) potency to that buff. With buffs that have Count, inflict random X potency and Y count for that buff (X + Y = stack + turn)
 --- @param amount integer
 --- Inflicts potency and count based on buff category. Accept negative values.
-function buffcategory(MultiTarget, buffCategory, stack, turn, activeRound, StackTurnAddRespectively, amount) end
+function buffcategory(target, buffCategory, stack, turn, activeRound, stackTurnAddRespectively, amount) end
+
+
+--- Sets how much damage you take whenever you take damage, MUST be used in conjunction with the ChangeTakeDamage timing.\
+--- [NOTE] This overrides the number of damage you take from an attack, but you can combine this consequence with the getdmg() acquirer for more control.\
+--- @param newAmount integer
+--- @see getdmg
+function setdmgtaken(newAmount) end
 
 --- @param MultiTarget TargetMulti
 --- @param newValue integer
