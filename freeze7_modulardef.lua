@@ -1,7 +1,7 @@
 ---@meta
 
 --[[
-    Version: 1.1.2
+    Version: 1.1.3
     Modular Version: 4.5.2
 --]]
 
@@ -91,6 +91,192 @@
 
 --#endregion
 
+--#region Deprecated
+
+--- @deprecated
+--- @see gethp
+function hpcheck(target, getAs) return 0 end;
+
+--- @deprecated
+--- @see mpcheck
+function mpcheck(target, getAs) return 0 end;
+
+--- @deprecated
+--- @see getbuff
+function bufcheck(target, getAs) return 0 end;
+
+--- @deprecated
+--- @see getround
+function round() return 0 end;
+
+--- @deprecated
+--- @see getwave
+function wave() return 0 end;
+
+--- @deprecated
+--- @see getactivations
+function activations() return 0 end;
+
+--- @deprecated
+--- @see getunitstate
+function unitstate() return 0 end;
+
+--- @deprecated
+--- @see getinstid
+function instid(target) return 0 end;
+
+--- @deprecated
+--- @see getspeed
+function speedcheck(target, slotIndex) return 0 end;
+
+--- @deprecated
+--- @see getdeadallies
+function deadallies(target) return 0 end;
+
+--- @deprecated
+--- @see getbuff
+function areallied(target1, target2) return 0 end;
+
+--- @deprecated
+--- @see getallcoinstates
+function allcoinstate(target, get) return 0 end;
+
+--- @see getresonance
+--- @deprecated
+function resonance(type) return 0 end;
+
+--- @deprecated
+--- @see getresource
+function resource(type, enemy) return 0 end;
+
+--- @deprecated
+--- @see getskillbase
+function skillbase(target) end;
+
+--- @deprecated
+--- @see getskillatkweight
+function skillatkweight(target) return 0 end;
+
+--- @deprecated
+--- @see getskillatklevel
+function skillatklevel(target, coinIndex) return 0 end;
+
+--- @deprecated
+--- @see getskillatk
+function skillatk(target) return 0 end;
+
+--- @deprecated
+--- @see getskillattribute
+function skillattribute(target) return 0 end;
+
+--- @deprecated
+--- @see getskilldeftype
+function skilldeftype(target) return 0 end;
+
+--- @deprecated
+--- @see getskillrank
+function skillrank(target) return 0 end;
+
+--- @deprecated
+--- @see getskillegotype
+function skillegotype(target) return 0 end;
+
+--- @deprecated
+--- @see getskillslotcount
+function skillslotcount(target) return 0 end;
+
+--- @deprecated
+--- @see getskillcanduel
+function skillcanduel(target) return 0 end;
+
+--- @deprecated
+--- @see getskillteamkill
+function skillteamkill(target) return 0 end;
+
+--- @deprecated
+--- @see getskillfixedtarget
+function skillfixedtarget(target) return 0 end;
+
+--- @deprecated
+--- @see getcoinscale
+function onescale(target, coinIndex) return 0 end;
+
+--- @deprecated
+--- @see getattackamount
+function amountattacks(target) return 0 end;
+
+--- @deprecated
+--- @see iscoinbroken
+function coinisbroken() return 0 end;
+
+--- @deprecated
+--- @see getunitcount
+function unitcount(target) return 0 end;
+
+--- @deprecated
+--- @see getbreakcount
+function breakcount(target) return 0 end;
+
+--- @deprecated
+--- @see getbreakvalue
+function breakvalue(target, index) return 0 end;
+
+--- @deprecated
+--- @see gettime
+function timeget(param, leapYear) return 0 end;
+
+--- @deprecated
+--- @see iscoinrerolled
+function coinrerolled() return 0 end;
+
+--- @deprecated
+--- @see issameunit
+function sameunit(target1, target2) return 0 end;
+
+--- @deprecated
+--- @see getcoinoperator
+function coinoperator(target, coinIndex) return 0 end;
+
+--- @deprecated
+--- @see getbufftype
+function bufftype(keyword) return 0 end;
+
+--- @deprecated
+--- @see hasuseddefense
+function useddefaction(target) return 0 end;
+
+--- @deprecated
+--- @see getunitfaction
+function unitfaction(target) return 0 end;
+
+--- @deprecated
+--- @see getchainstatus
+function chainstatus() return 0 end;
+
+----------
+
+--- @deprecated
+--- @see healsp
+function mpdmg(target, amount) return 0 end;
+
+--- @deprecated
+--- @see buff
+function buf(target, buffKeyword, potency, count, activeRound, consume) return 0 end;
+
+--- @deprecated
+--- @see burst
+function explosion(target, times) return 0 end;
+
+--- @deprecated
+--- @see deluge
+function surge(target, amount) return 0 end;
+
+--- @deprecated
+--- @see buffcategory
+function bufcategory(target, buffCategory, stack, turn, activeRound, stackTurnAddRespectively, amount) return 0 end;
+
+--#endregion
+
 --#region Acquisition
 
 --- @param getAs "normal" | "%" | "max" | "missing" | "missing%"
@@ -153,7 +339,7 @@ function getunitstate(target) return 0 end
 --- @return integer
 --- Returns the unitID of a target.
 --- @nodiscard
-function getinstid(target) return 0 end
+function getid(target) return 0 end
 
 --- @param target TargetSingle
 --- @return integer
@@ -283,7 +469,7 @@ function getskillatkweight(target) return 0 end
 --- @return integer
 --- Returns the current skill's coin power.
 --- @nodiscard
-function getcoinscale(target, coinIndex) return 0 end
+function onescale(target, coinIndex) return 0 end
 
 --- @param target TargetSingle
 --- @param coinIndex integer
@@ -371,7 +557,7 @@ function getbuffcount(target, mode) return 0 end
 --- @param target TargetSingle
 --- @return integer
 --- Returns the amount of units matching the target selector.\
---- Example: unitcount(NoParts99) would return the amount of enemies alive.
+--- Example: getunitcount(NoParts99) would return the amount of enemies alive.
 --- @nodiscard
 function getunitcount(target) return 0 end
 
@@ -466,7 +652,6 @@ function getskillteamkill(target) return 0 end
 function getskillfixedtarget(target) return 0 end
 
 --- @param target TargetSingle
---- @param coinIndex integer
 --- @return 1 | 2 | 3
 --- Returns an integer representing the coin's operator type.\
 --- 1: Plus Coin | 2: Minus Coin | 3: Multiply Coin
@@ -501,6 +686,12 @@ function getsinres(target, sin) return 0 end;
 --- Returns whether the unit used a defense skill or not this turn.
 --- @nodiscard
 function hasuseddefense(target) return 0 end;
+
+--- @param target TargetSingle
+--- @return 1 | 0
+--- Returns whether the unit is a Sinner/Assistant (1), or an enemy (0).
+--- @nodiscard
+function getunitfaction(target) return 0 end;
 
 --- @return 0 | 1 | 2 |3
 --- Returns an integer representing the status of the chain of skills on the dashboard.\
@@ -568,8 +759,8 @@ function bonusdmg(target, damage, atkType, sinType) end
 
 --- @param target TargetMulti
 --- @param amount integer
---- Heal/Damage SP on the target by the given value.
---- Do not use this on the "IgnorePanic" timing, as it will crash the game due to recursion.
+--- Heal/Damage SP on the target by the given value.\
+--- Do not use this on the "IgnorePanic" timing, as it will very likely crash the game due to recursion.
 function healsp(target, amount) end
 
 --- @param target TargetMulti
@@ -604,8 +795,9 @@ function burst(target, times) end
 function breakdmg(target, value, times) end
 
 --- @param target TargetMulti
---- This function does not work. Do not use it.
+--- This function does not work. Do not use it.\
 --- "break" is a reserved word in Lua for breaking out of a loop, so the function cannot be called.\
+--- Its intended effect is to stagger the provided target.
 function _break(target) end
 
 --- @param target TargetMulti
@@ -1066,3 +1258,4 @@ function readfile(directory) return "" end
 function jsontolua(string) return {} end
 
 --#endregion
+
