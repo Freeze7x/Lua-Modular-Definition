@@ -1,8 +1,8 @@
 ---@meta
 
 --[[
-    Version: 1.0.8
-    Modular Version: 4.3.5
+    Version: 1.0.9
+    Modular Version: 4.3.6
 --]]
 
 --#region Aliases
@@ -45,9 +45,20 @@
 ---| 1
 ---| 0
 
----@alias TargetSample
+---@alias TargetSingle
 ---| "Self"
 ---| "MainTarget"
+---| "adjLeft"
+---| "adjRight"
+---| string
+
+---@alias TargetMulti
+---| "Self"
+---| "MainTarget"
+---| "EveryTarget"
+---| "All"
+---| "adjLeft"
+---| "adjRight"
 ---| string
 
 ---@alias BuffCategory
@@ -83,333 +94,394 @@
 
 --#region Acquisition
 
+
 --- @param getAs "normal" | "%" | "max" | "missing" | "missing%" -- Changes return value to match.
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return integer
 --- Returns the HP value from a target.\
 --- Percents are returned normalized to 100, and are rounded down.\
 --- Examples: 40% -> 40 | 45.3% -> 45 | 87.9% -> 87
+--- @nodiscard
 function hpcheck(target, getAs) return 0 end;
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return integer
 --- Returns the MP/SP value from a target.
+--- @nodiscard
 function mpcheck(target) return 0 end;
 
 --- @param buffKeyword string
 --- @param mode "stack" | "turn" | "+" | "*" | "consumed" -- "stack" = Potency, "turn" = Count, "+" = potency + count, "*" = potency × count, "consumed" = total consumed amount.
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return integer
 --- Returns a specified buff's property from a target.
+--- @nodiscard
 function bufcheck(target, buffKeyword, mode) return 0 end
 
 --- @return integer
 --- Returns the damage dealt from "OnSucceedAttack" and "WhenHit" timings.
+--- @nodiscard
 function getdmg() return 0 end
 
 --- @return integer
 --- Returns the current turn number.
+--- @nodiscard
 function round() return 0 end
 
 --- @return integer
 --- Returns the current wave number.
+--- @nodiscard
 function wave() return 0 end
 
 --- @return integer
---- [NOTE] This is believed to always return 0 in Lua scripts.\
+--- [NOTE] This always return 0 in Lua scripts.\
 --- Returns the number of times a Modular script has been called.\
 --- First time = 0.\
+--- @nodiscard
 function activations() return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return -1 | 0 | 1 | 2 -- -1 if the unit doesn't exist, 0 if the unit is dead, 1 if the unit is alive, and 2 if the unit is staggered.
 --- Returns the unit state as an integer (-1, 0, 1, 2).
+--- @nodiscard
 function unitstate(target) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return integer
 --- Returns the unitID of a target.
+--- @nodiscard
 function getid(target) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return integer
 --- Returns the characterID for a target (Sinners only).
+--- @nodiscard
 function getcharacterid(target) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return integer
 --- Returns the unique instance ID for a target.
+--- @nodiscard
 function instid(target) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @param slotIndex? integer -- Check a specific slot's speed instead.
 --- @return integer
 --- Returns the speed of a target.
+--- @nodiscard
 function speedcheck(target, slotIndex) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return integer
 --- Returns the pattern index of the target.
+--- @nodiscard
 function getpattern(target) return 0 end
 
 --- @param dataId integer
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return integer
 --- Gets encounter-persistent numeric data from the target that was set using setdata().\
 --- If the data will not be used outside of the Lua scope (i.e., in Modular scripts),\
 --- it is preferable to use setldata() and getldata() instead.
 --- @see setdata
+--- @nodiscard
 function getdata(target, dataId) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return integer
 --- Returns the amount of dead units who were allied with the target.
+--- @nodiscard
 function deadallies(target) return 0 end
 
 --- @param min integer
 --- @param max integer
 --- @return integer
 --- Returns a random integer between min and max (both inclusive).
+--- @nodiscard
 function random(min, max) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return integer
 --- Returns the current shield amount on the target.
+--- @nodiscard
 function getshield(target) return 0 end
 
---- @param target1 TargetSample
---- @param target2 TargetSample
+--- @param target1 TargetSingle
+--- @param target2 TargetSingle
 --- @return ModularBoolean
 --- Returns whether two targets are allied (1) or enemies (0).
+--- @nodiscard
 function areallied(target1, target2) return 0 end
 
 --- @return integer
 --- Returns the id of the skill currently being used.\
 --- Will not work on timings that do not have skills being used.
+--- @nodiscard
 function getskillid() return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @param get "cur" | "og" -- Current coin count | Original coin count
 --- @return integer
 --- Returns the coinIndex count for a target.
+--- @nodiscard
 function getcoincount(target, get) return 0 end
 
 --- @param get "full" | "headcount" | "tailcount"
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return integer
 --- Returns how many coins flipped a specific side.\
 --- "full" will return 1 if all Heads, 2 if all Tails, and 0 if mixed.
+--- @nodiscard
 function allcoinstate(target, get) return 0 end
 
 --- @param type "highres" | "highperfect" | Sin | "perfectCRIMSON" | "perfectSCARLET" | "perfectAMBER" | "perfectSHAMROCK" | "perfectAZURE" | "perfectINDIGO" | "perfectVIOLET"
 --- @return integer
 --- Returns the resonance count of the given type.\
 --- "highres" and "highperfect" will return the highest resonance.
+--- @nodiscard
 function resonance(type) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @param mode "AND" | "OR"
 --- @param ... string -- Keywords to check for.
 --- @return ModularBoolean
 --- Checks whether the target has one or more keywords.
+--- @nodiscard
 function haskey(target, mode, ...) return 0 end
 
 --- @param type Sin
 --- @param enemy? "Enemy" -- Return the enemy's resources instead. This is only used during Envy Peccatulum battles as of yet.
 --- @return integer
 --- Returns the amount of available sin resources.
+--- @nodiscard
 function resource(type, enemy) return 0 end;
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return integer
 --- Returns the current skill's base power.
+--- @nodiscard
 function skillbase(target) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return integer
 --- Returns the current skill's attack weight.
+--- @nodiscard
 function skillatkweight(target) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @param coinIndex integer
 --- @return integer
 --- Returns the current skill's coin power at the given index.
+--- @nodiscard
 function onescale(target, coinIndex) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @param coinIndex integer
 --- @return integer
 --- Returns the current skill's offense correction (+5, -5, +3, etc.).
+--- @nodiscard
 function skillatklevel(target, coinIndex) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return integer
 --- Returns the current skill's offense correction + the unit's offense level.
+--- @nodiscard
 function getskilllevel(target) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return 0 | 1 | 2 | 3 -- 0 = Slash, 1 = Pierce, 2 = Blunt, 3 = None
 --- Returns the current skill's attack type.
+--- @nodiscard
 function skillatk(target) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 -- 0 = Wrath | 1 = Lust | 2 = Sloth | 3 = Gluttony | 4 = Gloom | 5 = Pride | 6 = Envy | 7 = White | 8 = Black | 9 = Red | 10 = Pale | 11 = Neutral
 --- Returns the current skill's sin affinity as an integer between 0 and 11.
+--- @nodiscard
 function skillattribute(target) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return 0 | 1 | 2 | 3 | 4 | 5 -- 0 = None | 1 = Guard | 2 = Evade | 3 = Counter | 4 = Attack | 5 = Non Action
 --- Returns the current skill's defense type (if any).
+--- @nodiscard
 function skilldeftype(target) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return integer
 --- Returns the tier of the current skill, usually 1~3.
+--- @nodiscard
 function skillrank(target) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return 0 | 1 | 2 | 3 | 4 | 5 | 6 -- 0 = Skill | 1 = Awaken | 2 = Corrosion | 3 = Corrosion Unstable | 4 = Corrosion Stable | 5 = Upgrade | 6 = None
 --- Returns the current skill's E.G.O. type (if any).
+--- @nodiscard
 function skillegotype(target) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return integer
 --- Returns the number of attacks the target is being targeted by.
+--- @nodiscard
 function amountattacks(target) return 0 end
 
 --- @return ModularBoolean
 --- Returns whether the coin this script is on is broken.
+--- @nodiscard
 function coinisbroken() return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return integer
 --- Returns the amount of skill slots the target has.
+--- @nodiscard
 function skillslotcount(target) return 0 end
 
 --- @return ModularBoolean
 --- Returns 1 if the battle is a focused encounter, 0 if it is a regular encounter.
+--- @nodiscard
 function isfocused() return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @param mode "prev" | "current" -- Last Turn | Current Turn
 --- @return integer
 --- Returns the amount of damage taken by the target.
+--- @nodiscard
 function getdmgtaken(target, mode) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @param mode "neg" | "pos" -- Filter to only count positive or negative buffs.
 --- @return integer
 --- Returns the count of buffs of a type on the target.
+--- @nodiscard
 function getbuffcount(target, mode) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return integer
 --- Returns the amount of units matching the target selector.\
 --- Example: unitcount(NoParts99) would return the amount of enemies alive.
+--- @nodiscard
 function unitcount(target) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return integer
 --- Returns the amount of stagger bars on the target.
+--- @nodiscard
 function breakcount(target) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @param index integer? -- Stagger bar index (0 would be the first Stagger bar).
 --- @return integer
 --- Returns the HP value that a target's stagger bar lies.
+--- @nodiscard
 function breakvalue(target, index) return 0 end
 
 --- @param param "dayofweek" | "dayofmonth" | "dayofyear" | "hours" | "minutes" | "seconds" | "milliseconds" | "ticks" | "month" | "year" | "isleapyear"
 --- @param leapYear integer?
 --- @return integer
 --- Returns requested time component or leap-year info.\
---- they are going to kill themselves, they do not know why this exists. 🦅
+--- [Combat Start] Gain 1 Clash Power Up for every 25 seconds that passed during the chaining phase (max 4)
+--- @nodiscard
 function timeget(param, leapYear) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @param statName "deployment" | "deadAllyCount" | SinRes | "panicType" | "isRetreated" | "speedMin" | "speedMax" | "speedMinOG" | "speedMaxOG" | "hasMP" | "deflevel"
 --- @return integer
 --- Retrieves a property value from the target.
+--- @nodiscard
 function getstat(target, statName) return 0 end
 
 --- @return ModularBoolean
 --- Returns whether the coin was reused.
+--- @nodiscard
 function coinrerolled() return 0 end
 
 --- @param var1 integer
 --- @param add "add"
 --- @return integer
 --- Gets the stage extra slot.
+--- @nodiscard
 function stageextraslot(var1, add) return 0 end
 
 --- @param get "available" | "spent"
 --- @return integer
 --- Returns the current bloodfeast available or consumed.
+--- @nodiscard
 function getbloodfeast(get) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return integer
 --- Returns the level of the target.
+--- @nodiscard
 function getlevel(target) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return ModularBoolean
 --- Returns if the coin this script is attached to is unbreakable.
+--- @nodiscard
 function isunbreakable(target) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return ModularBoolean
 --- Returns if the coin this script is attached to is usable in a clash.
+--- @nodiscard
 function isusableinduel(target) return 0 end
 
 --- @param target1 string
 --- @param target2 string
 --- @return ModularBoolean
 --- Returns whether both selectors refer to the exact same unit.
+--- @nodiscard
 function sameunit(target1, target2) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return ModularBoolean
 --- Returns whether the target's skill is clashable.
+--- @nodiscard
 function skillcanduel(target) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return ModularBoolean
 --- Returns whether the target's skill can kill their allies.
+--- @nodiscard
 function skillteamkill(target) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return ModularBoolean
 --- Returns whether the target's skill cannot be redirected.
+--- @nodiscard
 function skillfixedtarget(target) return 0 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return 1 | 2 | 3 -- 1 = ADD | 2 = SUB | 3 = MUL
 --- Returns an integer representing the coin's operator type.
+--- @nodiscard
 function coinoperator(target, coinIndex) return 1 end
 
 --- @param keyword string
 --- @return 0 | 1 | 2 -- 0 = Neutral | 1 = Positive | 2 = Negative
 --- Returns an integer representing the buff's type.
+--- @nodiscard
 function bufftype(keyword) return 1 end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @param atkType AttackTypeCaps
 --- @return integer
 --- Return an integer (normalized to 0~200) that represents the resistance to an attack type. (Doesn't work for abnormalities)\
 --- (e.g., x0.75 -> 75).
+--- @nodiscard
 function getatkres(target, atkType) return 0 end;
 
---- Return an integer (normalized to 0~200) that represents the resistance to a sin affinity. (Doesn't work for abnormalities)\
---- (e.g., x0.67 -> 67).
---- @param target TargetSample
+--- @param target TargetSingle
 --- @param sin Sin
 --- @return integer
+--- Return an integer (normalized to 0~200) that represents the resistance to a sin affinity. (Doesn't work for abnormalities)\
+--- (e.g., x0.67 -> 67).
+--- @nodiscard
 function getsinres(target, sin) return 0 end;
 
---- Returns whether the unit used a defense skill or not this turn.
---- @param target TargetSample
+--- @param target TargetSingle
 --- @return ModularBoolean
+--- Returns whether the unit used a defense skill or not this turn.
+--- @nodiscard
 function useddefaction(target) return 0 end;
 
 --#endregion
@@ -421,21 +493,21 @@ function useddefaction(target) return 0 end;
 --- Prints a line in the BepInEx Log with the provided VALUE.
 function log(msg, int) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param damage integer
 --- @param atkType -1 | 0 | 1 | 2 -- True (-1) | Slash | Pierce | Blunt
 --- @param sinType -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 -- True (-1) | Wrath | Lust | Sloth | Gluttony | Gloom | Pride | Envy | White | Black | Red | Pale | Neutral
 --- Deals fixed sin affinity and attack type damage to the target.
 function bonusdmg(target, damage, atkType, sinType) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param amount integer
 --- [IMPORTANT] Despite its name, this will increase sanity rather than decrease it.\
 --- Heal/Damage SP on the target by the given value.
 --- Do not use this on the "IgnorePanic" timing, as it will crash the game due to recursion.
 function mpdmg(target, amount) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param buffKeyword string
 --- @param potency integer
 --- @param count integer
@@ -444,38 +516,38 @@ function mpdmg(target, amount) end
 --- Inflicts, modifies, or consumes a buff on the target specified by keyword. Negative potency/count can be used to consume the buff instead.
 function buf(target, buffKeyword, potency, count, activeRound, consume) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param amount integer
 --- @param persist? "perm" -- Prevents the shield from decaying at round end.
 --- Applies shield to the target.
 function shield(target, amount, persist) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param amount integer|string -- exact HP value or 'X%'.
 --- Heals HP on the specified target by value or percent. Negative values deal true HP damage (like bleed).
 function healhp(target, amount) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param times integer -- How many times to trigger.
 --- Triggers Tremor Burst on the target.
 function explosion(target, times) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param value integer
 --- @param times integer? -- How many times to trigger.
 --- Raise stagger threshold by the value, negative values "heal" stagger.
 function breakdmg(target, value, times) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- Because break is a reserved word in Lua for breaking out of a loop, the break() modular function cannot work in Lua.\
 --- DO NOT TRY TO USE THIS FUNCTION AS AN ALTERNATIVE, IT IS HERE FOR INFORMATION ONLY.
 function breakREADMEIFTRYINGTOSTAGGERTARGET(target) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- Recover from stagger.
 function breakrecover(target) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param where integer|string -- exact HP value or 'X%'.
 --- Adds a new Stagger Threshold. Value may be an exact HP number or percent of max HP.\
 --- Setting above max HP causes stagger on next hit.
@@ -510,7 +582,7 @@ function dmgmult(value) end
 --- Sets the pattern index for the target. (WIP)
 function pattern(value) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param dataId integer
 --- @param value integer
 --- Sets encounter-persistent numeric data to the target that was set using setdata().\
@@ -529,19 +601,19 @@ function changeskill(skillId) end
 --- Using on their OnSucceedAttack timing will result in the coins being generated on attack start rather than appearing when reused.
 function reusecoin(...) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param value integer
 --- @param turn? "this" | "next" -- Default: "next"
 --- @param slotApplication? -2 | -1 | integer -2 = Slot this script is used on | -1 = All slots | 0 or greater = A specific slot index.
 --- Adds aggro to the target across slots.
 function aggro(target, value, turn, slotApplication) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- Reuses the current skill against all targets given.
 function skillreuse(target) end
 
---- @param attacker TargetSample
---- @param victim TargetSample
+--- @param attacker TargetSingle
+--- @param victim TargetMulti
 --- @param skillId integer | string -- Any Skill ID, or S# and D# (e.g., S2, D1)
 --- @param defense? "def" Provide this parameter if sending a defense skill does not work.
 --- Sends a skill from attacker to victim.\
@@ -555,7 +627,7 @@ function skillsend(attacker, victim, skillId, defense) end
 --- Will log errors for invalid indices, or if the target-selector "Self" is invalid in this context.
 function skillslotreplace(slotIndex, skillIdLost, skillIdGiven) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param value integer
 --- Add/Subtracts from the unit's maxActionSlotNum (Abno only).
 function setslotadder(target, value) end
@@ -572,12 +644,12 @@ function resource(type, amount, enemy) return 0 end;
 --- Discards skills from the target.
 function discard(mode, amount) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param passiveId integer
 --- Adds a passive to the selected units by passive id.
 function passiveadd(target, passiveId) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param passiveId integer
 --- Removes the specified passive from the selected units.
 function passiveremove(target, passiveId) end
@@ -592,24 +664,24 @@ function endbattle() end
 --- Sets whether the skill can be used for clashing.
 function skillcanduel(value) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param passiveId integer | "all"
 --- Reveals passives on the target.
 function passivereveal(target, passiveId) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param skillId integer | "all"
 --- Reveals the skills on the target.
 function skillreveal(target, skillId) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param bodyPartId integer
 --- @param resType Sin | AttackType
 --- @param resTypeType "type" | "attribute" -- Use "type" if resType is an attack type, and "attribute" when resType is a sin.
 --- Reveals resistance info of the target.
 function resistreveal(target, bodyPartId, resType, resTypeType) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param appearanceId integer | string
 --- Changes the appearance of the target.\
 --- [NOTE] This will always activate at combat start because of how the game handles visuals.
@@ -619,11 +691,11 @@ function appearance(target, appearanceId) end
 --- Cancels the specified coin indices (similar to cancel when no ammo).
 function coincancel(...) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- Gives a skill slot to the target (Sinners only).
 function skillslotgive(target) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param index integer --- Slot index to remove, starts at 1.
 --- Removes a skill slot from the target (Sinners only).
 function skillslotremove(target, index) end
@@ -647,11 +719,11 @@ function summonenemy(enemyId, level, uptie, waveIndex, regularEncounter) end
 --- Summons the units from the subunitList.
 function summonunitfromqueue() end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- i am gnoming it so good
 function gnome(target) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param buffKeyword string
 --- @param superPosition? "superpos" -- Enable Superposition behavior.
 --- Tremor Conversion into the provided buff.
@@ -666,25 +738,25 @@ function setimmortal(value) end
 --- Changes the current map/background and size.
 function changemap(mapName, mapSize) end
 
---- @param target TargetSample | "upper" -- The special exclusive targeting "upper" can display top-screen text instead.
+--- @param target TargetMulti | "upper" -- The special exclusive targeting "upper" can display top-screen text instead.
 --- @param dialog string -- Use _ instead of spaces.
 --- Shows a battle dialog bubble for the target. Use '_' for spaces.
 function battledialogline(target, dialog) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param vfx string
 --- @param active ModularBoolean
 --- @param layerType "NONE"|"DIRECTION"|"ONCE"|"BACK"|"SKIN"
 --- Toggles a visual effect label around the target.
 function effectlabel(target, vfx, active, layerType) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param active ModularBoolean
 --- deploy the sensational superlative sanguine sancho shield. (S.S.S.S.S.) 🦅🦅🦅🦅🦅\
 --- [NOTE] Only works for 8380_SanchoAppearance and 1079_Sancho_BerserkAppearance. Might not work for 10310_Donquixote_DarkSanchoAppearance.
 function sanchoshield(target, active) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param buffKeyword string -- What appears on the unit when they retreat (e.g., Overwatch Assignment).
 --- Queues the target to retreat at turn end.
 function retreat(target, buffKeyword) end
@@ -694,12 +766,12 @@ function retreat(target, buffKeyword) end
 --- Play a given SFX, BGM, Voice line, or Announcer line.
 function sound(type, toPlay) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param amount integer
 --- Triggers Sinking Deluge.
 function surge(target, amount) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param ability string
 --- @param stack integer
 --- @param turn integer
@@ -707,7 +779,7 @@ function surge(target, amount) end
 --- Adds a unique system ability to the target.
 function addability(target, ability, stack, turn, activeRound) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param ability string
 --- Removes a unique system ability from the target.
 function removeability(target, ability) end
@@ -733,7 +805,7 @@ function stageextraslot(var1, add) end
 
 --- @param mode "add" | "sub" | "spend"
 --- @param value integer
---- @param target? TargetSample
+--- @param target? TargetMulti
 --- Modifies bloodfeast resource: add/sub/spend value. "spend" requires a target to consume for.
 function bloodfeast(mode, value, target) end
 
@@ -741,8 +813,8 @@ function bloodfeast(mode, value, target) end
 --- Add to the chance of a critical hit.
 function critchance(value) end
 
---- @param defender "Defender" | TargetSample
---- @param defended "Defended" | TargetSample
+--- @param defender "Defender" | TargetMulti
+--- @param defended "Defended" | TargetMulti
 --- @param skillId integer -- Skill to defend with. Must be in the unit's defense skill list.
 --- Defends a unit based on the parameters.\
 --- [NOTE] The defender Skill must have the Skill ability "SupportiveDefense", and the unit defending must have a buff with the ability "SupportProtect" (Mao Faust assist defense).
@@ -758,7 +830,8 @@ function ignorebreak(value) end
 
 --- @param motionType "Default" | "Dead" | "Evade" | "Guard" | "Damaged" | "Move" | "Attack" | "S1" | "S2" | "S3" | "S4" | "S5" | "S6" | "S7" | "S8" | "S9" | "S10" | "Parrying" | "Idle" | "Parrying_Range" | "Special1" | "Special2" | "Special3" | "S11" | "S12" | "S13" | "S14" | "S15" | "S16" | "S17" | "S18" | "S19" | "S20" | "S21" | "Empty"
 --- @param motionIndex integer
---- Changes a skill's motion/animation type and index (e.g., S1..S20 and index).
+--- Changes a skill's motion/animation type and index.\
+--- Example: changemotion("S1", 2) will set the motion to the skill 1 motion's third coin.
 function changemotion(motionType, motionIndex) end
 
 --- @param motionType Sin | Virtues
@@ -766,31 +839,31 @@ function changemotion(motionType, motionIndex) end
 --- This works best on the "OnStartBehaviour" timing, but may be usable in other timings as well.
 function changeaffinity(motionType) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param atkType AttackTypeCaps
---- @param newValue integer -- 0..200 (game uses newValue/100)
+--- @param newValue integer -- 0 ≤ x ≤ 200 (game uses newValue/100)
 --- @param add? any -- if provided, add newValue to existing resistance instead of overriding.
 --- Override an attack resistance value for the selected targets.
 function ovwatkres(target, atkType, newValue, add) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param sinType Sin
---- @param newValue integer -- 0..200 (game uses newValue/100)
+--- @param newValue integer -- 0 ≤ x ≤ 200 (game uses newValue/100)
 --- @param add? any -- if provided, add newValue to existing resistance instead of overriding.
 --- Override a sin resistance value for the selected targets.
 function ovwsinres(target, sinType, newValue, add) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- Refreshes the target's speed. Useful after applying MaxSpeedAdder/MinSpeedAdder system abilities.
 function refreshspeed(target) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param keyword string -- The buff keyword to destroy.
 --- @param destroyRound 0 | 1 | 2 -- This Turn | Next Turn | Both
 --- Destroy buff(s) on targets.
 function destroybuff(target, keyword, destroyRound) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param mode BuffCategory
 --- @param destroyRound 0 | 1 | 2 -- This Turn | Next Turn | Both
 --- @param amount integer -- Number of buffs to pick randomly and destroy (>= 0)
@@ -798,14 +871,14 @@ function destroybuff(target, keyword, destroyRound) end
 --- Destroy buff(s) on targets.
 function destroybuff(target, mode, destroyRound, amount, includeCantBeDespelled) end
 
---- @param target TargetSample
+--- @param target TargetMulti
 --- @param breakIndex integer -- Index of the stagger bar (starts at 0). Use -1 to deactivate all stagger bars.
 --- @param sort boolean -- If true, sort the active stagger bars list in descending order before deactivation.
 --- @param reverseIndex? any -- Optional. If provided, the active stagger bars list is reversed before indexing (index still starts at 0).
 --- Deactivates one or all active stagger bars on selected targets.
 function deactivebreak(target, breakIndex, sort, reverseIndex) end
 
---- @param MultiTarget TargetSample
+--- @param MultiTarget TargetMulti
 --- @param buffCategory BuffCategory
 --- @param stack integer
 --- @param turn integer
@@ -815,7 +888,7 @@ function deactivebreak(target, breakIndex, sort, reverseIndex) end
 --- Inflicts potency and count based on buff category. Accept negative values.
 function bufcategory(MultiTarget, buffCategory, stack, turn, activeRound, StackTurnAddRespectively, amount) end
 
---- @param MultiTarget TargetSample
+--- @param MultiTarget TargetMulti
 --- @param newValue integer
 --- Sets the unit's defense correction.
 function defcorrection(MultiTarget, newValue) end
@@ -840,14 +913,14 @@ function turn(value) return 0 end
 
 --#region Lua Exclusive
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @param dataId string
 --- @param value any
 --- Sets encounter-persistent data to the target that can be retrieved using getldata().
 --- @see getldata
 function setldata(target, dataId, value) end
 
---- @param target TargetSample
+--- @param target TargetSingle
 --- @param dataId string
 --- @return any
 --- Gets encounter-persistent data from the target that was set using setldata().
@@ -864,12 +937,14 @@ function resetadders() end
 --- @return string[] -- An array of inst ids, e.g. {"inst12","inst34"}
 --- Takes a multi-target selector string and returns an array of selected targets (i.e. ["inst12", "inst34"]).\
 --- Inst selectors are recognized by Modular, meaning you can pass them into consequence/value acquirers that accept target selectors.
+--- @nodiscard
 function selecttargets(selector) return {} end
 
 --- @param directory string -- Path of the directory (i.e. "Lethe")
 --- @return string[]
 --- Lists all files in a directory.\
 --- Files outside of the Plugins folder cannot be accessed.
+--- @nodiscard
 function listfiles(directory) return {} end
 
 --- @param directory string -- Path of the directory (i.e. "Lethe")
@@ -878,11 +953,13 @@ function listfiles(directory) return {} end
 --- This function does not list files.\
 --- Files outside of the Plugins folder cannot be accessed.\
 --- @see listfiles
+--- @nodiscard
 function listdirectories(directory) return {} end
 
 --- @param target string
 --- @return string[]
 --- Returns all the buffs' keyword that the target has.
+--- @nodiscard
 function listbuffs(target) return {} end
 
 --- @param key string
@@ -897,6 +974,7 @@ function setgdata(key, value) end;
 --- Gets a global value that was set using setgdata().\
 --- This value persists until the client is closed.\
 --- @see setgdata
+--- @nodiscard
 function getgdata(key) return {} end;
 
 --- Clears all global data.\
@@ -908,11 +986,13 @@ function clearallgdata() end;
 --- @return string
 --- Reads the contents of a file.\
 --- Files outside of the Plugins folder cannot be accessed.
+--- @nodiscard
 function readfile(directory) return "" end
 
 --- @return table
 --- @param string string
 --- Turn a string of json into a lua table.
+--- @nodiscard
 function jsontolua(string) return {} end
 
 --#endregion
