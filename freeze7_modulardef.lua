@@ -1,8 +1,8 @@
 ---@meta
 
 --[[
-    Version: 1.1.5
-    Modular Version: 4.6.1
+    Version: 1.1.6
+    Modular Version: 4.6.2
 --]]
 
 --#region Aliases
@@ -721,6 +721,7 @@ function getchainstatus() return 0 end;
 function getsinsindashboard(sin, layer, includePrediction) end
 
 --- @return 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+--- Only usable on the "OnGainBuff" timing.\
 --- Returns an integer representing where the buff came from.\
 --- 0: No source\
 --- 1: Skill effect\
@@ -736,20 +737,40 @@ function getsinsindashboard(sin, layer, includePrediction) end
 function gbsource() return 0 end;
 
 --- @return integer
+--- Only usable on the "OnGainBuff" timing.\
 --- Returns how much potency the gained buff received.
 --- @nodiscard
 function gbstack() return 0 end;
 
 --- @return integer
+--- Only usable on the "OnGainBuff" timing.\
 --- Returns how much count the gained buff received.
 --- @nodiscard
 function gbturn() return 0 end;
 
 --- @return 0 | 1 | 2
---- Returns the ActiveRound of the buff\
+--- Only usable on the "OnGainBuff" timing.\
+--- Returns the ActiveRound of the buff.\
 --- 0: This Turn | 1: Next Turn | 2: Both
 --- @nodiscard
-function gbturn() return 0 end;
+function gbactiveround() return 0 end;
+
+--- @return 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
+--- Only usable on the "ChangeTakeDamage" timing.\
+--- Returns an integer representing the source of the damage.\
+--- 0: Combat\
+--- 1: Buff\
+--- 2: Passive\
+--- 3: Skill\
+--- 4: Event\
+--- 5: E.G.O. Gift\
+--- 6: Stage\
+--- 7: System\
+--- 8: System Ability\
+--- 9: Forced\
+--- 10: None
+--- @nodiscard
+function ctdsource() return 0 end;
 
 --#endregion
 
@@ -1066,7 +1087,7 @@ function lyrics(color, text) end
 --- Shows upper screen text in the UI with specified color.
 function uppertext(color, text) end
 
---- @param ... integer | "all" | -1  -- The coins to make unbreakable, -1 to target the coin this script is on (starts at 0). 
+--- @param ... integer | "all" | -1  -- The coins to make unbreakable, -1 to target the coin this script is on (starts at 0).
 --- Makes the specified coins unbreakable.
 function makeunbreakable(...) end
 
@@ -1159,7 +1180,6 @@ function deactivebreak(target, breakIndex, sort, reverseIndex) end
 --- @param amount integer
 --- Inflicts potency and count based on buff category. Accept negative values.
 function buffcategory(target, buffCategory, stack, turn, activeRound, stackTurnAddRespectively, amount) end
-
 
 --- Sets how much damage you take whenever you take damage, MUST be used in conjunction with the ChangeTakeDamage timing.\
 --- [NOTE] This overrides the number of damage you take from an attack, but you can combine this consequence with the getdmg() acquirer for more control.\
@@ -1276,4 +1296,3 @@ function readfile(directory) return "" end
 function jsontolua(string) return {} end
 
 --#endregion
-
