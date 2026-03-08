@@ -1,7 +1,7 @@
 ---@meta
 
 --[[
-    Version: 1.1.6
+    Version: 1.1.7
     Modular Version: 4.6.2
 --]]
 
@@ -1187,10 +1187,14 @@ function buffcategory(target, buffCategory, stack, turn, activeRound, stackTurnA
 --- @see getdmg
 function setdmgtaken(newAmount) end
 
---- @param MultiTarget TargetMulti
+--- @param target TargetMulti
 --- @param newValue integer
 --- Sets the unit's defense correction.
-function defcorrection(MultiTarget, newValue) end
+function defcorrection(target, newValue) end
+
+--- @param target TargetMulti
+--- Hides all of the target's skills from their skill panel, showing "Conditions Unmet".
+function skillhide(target) end
 
 --#endregion
 
