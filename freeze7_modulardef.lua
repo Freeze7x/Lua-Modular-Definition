@@ -1,8 +1,8 @@
 ---@meta
 
 --[[
-    Version: 1.2.0
-    Modular Version: 4.6.7
+    Version: 1.2.1
+    Modular Version: 4.6.8
 --]]
 
 -- Aliases for ease of use.
@@ -850,6 +850,23 @@ function log(msg, int) end
 --- @param sinType -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 -- True (-1) | Wrath | Lust | Sloth | Gluttony | Gloom | Pride | Envy
 --- Deals fixed sin affinity and attack type damage to the target.
 function bonusdmg(target, damage, atkType, sinType) end
+
+-- - @param mode "Magic" | "BuffGiveDmg" | "BuffTakeDmg"
+-- - @param generic1 TargetSingle | DamageSourceType
+-- - @param generic2 DamageSourceType
+-- - @param generic3 "NullAction" | "UseAction" | "NotByStack" | "ByStack"
+-- - @param generic4 string
+
+--- @param target TargetMulti
+--- @param damage integer
+--- @param atkType -1 | 0 | 1 | 2 -- True (-1) | Slash | Pierce | Blunt
+--- @param sinType -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 -- True (-1) | Wrath | Lust | Sloth | Gluttony | Gloom | Pride | Envy
+--- @overload fun(target: TargetMulti, damage: integer, atkType: -1 | 0 | 1 | 2, sinType: -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6, mode: "Magic", attacker: TargetSingle, source: DamageSourceType, forceUseAction: "NullAction" | "UseAction", keyword: string) end
+--- @overload fun(target: TargetMulti, damage: integer, atkType: -1 | nil      , sinType: -1                            , mode: "BuffGiveDmg", source: DamageSourceType) end
+--- @overload fun(target: "" | nil   , damage: integer, atkType: -1 | 0 | 1 | 2, sinType: -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6, mode: "BuffTakeDmg", attacker: TargetSingle | "null", source: DamageSourceType, byStack: "NotByStack" | "ByStack") end
+--- Deals fixed sin affinity and attack type damage to the target by buff.\
+--- Please look at https://rentry.co/glitchscript#bonusdmgbybuffvar_1-var_2-var_3-var_4 for clarity, as this function has too many overloads to be properly documented.
+function bonusdmgbybuff(target, damage, atkType, sinType) end
 
 --- @param target TargetMulti
 --- @param amount integer
