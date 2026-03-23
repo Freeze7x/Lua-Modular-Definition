@@ -1,8 +1,8 @@
 ---@meta
 
 --[[
-    Version: 1.1.7
-    Modular Version: 4.6.2
+    Version: 1.1.8
+    Modular Version: 4.6.3
 --]]
 
 --#region Aliases
@@ -50,6 +50,8 @@
 ---| "MainTarget"
 ---| "adjLeft"
 ---| "adjRight"
+---| "Victim"
+---| "Killer"
 ---| string
 
 ---@alias TargetMulti
