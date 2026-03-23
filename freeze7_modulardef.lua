@@ -1,8 +1,8 @@
 ---@meta
 
 --[[
-    Version: 1.2.1
-    Modular Version: 4.6.8
+    Version: 1.2.2
+    Modular Version: 4.6.9
 --]]
 
 -- Aliases for ease of use.
@@ -409,12 +409,11 @@ function getspeed(target, slotIndex) return 0 end
 --- @nodiscard
 function getpattern(target) return 0 end
 
+--- @param target TargetSingle | "Encounter"
 --- @param dataId integer
---- @param target TargetSingle
 --- @return integer
---- Gets encounter-persistent numeric data from the target that was set using setdata().\
---- If the data will not be used outside of the Lua scope (i.e., in Modular scripts),\
---- it is preferable to use setldata() and getldata() instead.
+--- Gets encounter-persistent numeric data from the target (or "Encounter" for global stage data) that was set using setdata().\
+--- If the data will not be used outside of the Lua scope (i.e., in Modular scripts), it is preferable to use setldata() and getldata() instead.
 --- @see setdata
 --- @nodiscard
 function getdata(target, dataId) return 0 end
@@ -961,9 +960,8 @@ function pattern(value) end
 --- @param target TargetMulti
 --- @param dataId integer
 --- @param value integer
---- Sets encounter-persistent numeric data to the target that was set using setdata().\
---- If the data will not be used outside of the Lua scope (i.e., in Modular scripts),\
---- it is preferable to use setldata() and getldata() instead.
+--- Sets encounter-persistent numeric data to the target (or "Encounter" for global stage data) that was set using setdata().\
+--- If the data will not be used outside of the Lua scope (i.e., in Modular scripts), it is preferable to use setldata() and getldata() instead.
 --- @see getdata
 function setdata(target, dataId, value) end
 
