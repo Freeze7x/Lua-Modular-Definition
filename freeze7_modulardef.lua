@@ -1,8 +1,8 @@
 ---@meta
 
 --[[
-    Version: 1.1.8
-    Modular Version: 4.6.3
+    Version: 1.1.9
+    Modular Version: 4.6.5
 --]]
 
 --#region Aliases
@@ -295,6 +295,19 @@ function gethp(target, getAs) return 0 end;
 
 --- @param target TargetSingle
 --- @return integer
+--- Returns the default max HP value from a target.
+--- @nodiscard
+function getdefaultmaxhp(target) return 0 end;
+
+--- @param target TargetSingle
+--- @return integer
+--- Returns the amount of HP gained per level.\
+--- The values are returned in the hundredths place, so a value of 0.05 would be returned as 5.
+--- @nodiscard
+function gethpincrement(target) return 0 end;
+
+--- @param target TargetSingle
+--- @return integer
 --- Returns the MP/SP value from a target.\
 --- Abnormalities will always return 0.
 --- @nodiscard
@@ -339,6 +352,15 @@ function getactivations() return 0 end
 --- 2: Unit is staggered.
 --- @nodiscard
 function getunitstate(target) return 0 end
+
+--- @param target TargetSingle
+--- @return -1 | 0 | 1
+--- Returns the unit state as an integer.\
+--- -1: Unit doesn't exist.\
+--- 0: Unit is unable to act.\
+--- 1: Unit is able to act.
+--- @nodiscard
+function isactionable(target) return 0 end
 
 --- @param target TargetSingle
 --- @return integer
@@ -408,10 +430,16 @@ function getshield(target) return 0 end
 function areallies(target1, target2) return 0 end
 
 --- @return integer
---- Returns the id of the skill currently being used.\
+--- Returns the ID of the skill currently being used.\
 --- Will not work on timings that do not have skills being used.
 --- @nodiscard
 function getskillid() return 0 end
+
+--- @return integer -- Returns 0 if no skill can be found
+--- Returns the ID of the skill the opponent is currently using.\
+--- Will not work on timings that do not have skills being used.
+--- @nodiscard
+function getopposkillid() return 0 end
 
 --- @param target TargetSingle
 --- @param passiveId TargetSingle
@@ -419,6 +447,13 @@ function getskillid() return 0 end
 --- Checks if the unit has the specified passive via ID.\
 --- @nodiscard
 function haspassive(target, passiveId) return 0 end
+
+--- @param target TargetSingle
+--- @return number
+--- Gets the resulting power of a skill.\
+--- May or may not work, feel free to use log() to verify it works.
+--- @nodiscard
+function getcurrentpower(target) return 0 end
 
 --- @param target TargetSingle
 --- @param get "cur" | "og" -- Current coin count | Original coin count
@@ -686,6 +721,15 @@ function getbufftype(keyword) return 1 end
 function getatkres(target, atkType) return 0 end;
 
 --- @param target TargetSingle
+--- @return -1 | 0 | 1
+--- Returns the unit state as an integer.\
+--- -1: Unit doesn't exist.\
+--- 0: Unit did not use any skills last turn.\
+--- 1: Unit used at least one skill last turn.
+--- @nodiscard
+function diduseskilllastturn(target) return 0 end
+
+--- @param target TargetSingle
 --- @param sin Sin
 --- @return integer
 --- Return an integer (normalized to 0~200) that represents the resistance to a sin affinity. (Doesn't work for abnormalities)\
@@ -828,10 +872,18 @@ function burst(target, times) end
 function breakdmg(target, value, times) end
 
 --- @param target TargetMulti
---- This function does not work. Do not use it.\
+--- @param type "natural" | "force" | "both"
+--- This function does not work. Do not use it, use lbreak() instead.\
 --- "break" is a reserved word in Lua for breaking out of a loop, so the function cannot be called.\
 --- Its intended effect is to stagger the provided target.
-function _break(target) end
+--- @see lbreak
+function _break(target, type) end
+
+--- @param target TargetMulti
+--- @param type "natural" | "force" | "both"
+--- Staggers the target immediately.\
+--- Type determines what kind of stagger it is, which can affect skill effects and passives that recover from stagger if the stagger is not forced.
+function lbreak(target, type) end
 
 --- @param target TargetMulti
 --- Recover from stagger.
@@ -1217,6 +1269,8 @@ function turn(value) return 0 end
 
 --#endregion
 
+-- Functions that can only be used in Lua
+-- They reside here until they are documented.
 --#region Lua Exclusive
 
 --- @param target TargetSingle
@@ -1297,8 +1351,28 @@ function readfile(directory) return "" end
 
 --- @return table
 --- @param string string
---- Turn a string of json into a lua table.
+--- Turn a string of json into a Lua table.
 --- @nodiscard
 function jsontolua(string) return {} end
+
+--#endregion
+
+-- Functions that have no documentation in https://rentry.co/glitchscript.
+-- They reside here until they are documented.
+--#region Undocumented
+
+function removecoin() end
+
+function setlevel() end
+
+function setmaxhp() end
+
+function changesp() end
+
+function getcurrentmapid() return "" end
+
+function getapperaanceid() return "" end
+
+function listbreakvalues() return {} end
 
 --#endregion
