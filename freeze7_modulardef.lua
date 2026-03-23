@@ -1,10 +1,11 @@
 ---@meta
 
 --[[
-    Version: 1.1.9
-    Modular Version: 4.6.5
+    Version: 1.2.0
+    Modular Version: 4.6.7
 --]]
 
+-- Aliases for ease of use.
 --#region Aliases
 
 ---@alias Sin
@@ -93,8 +94,22 @@
 ---| "VIBRATION_MERGED"
 ---| "SUPPORTIVE_PROTECT"
 
+---@alias DamageSourceType
+---| "COMBAT"
+---| "BUFF"
+---| "PASSIVE"
+---| "SKILL"
+---| "EVENT"
+---| "EGO_GIFT"
+---| "STAGE"
+---| "SYSTEM"
+---| "SYSTEM_ABILITY"
+---| "FORCED"
+---| "NONE"
 --#endregion
 
+-- Functions superseded by newer functions with better names are listed here for compatibility reasons.
+-- Do not use these in new scripts, and try to replace them with the newer functions in old scripts when possible.
 --#region Deprecated
 
 --- @deprecated
@@ -282,6 +297,7 @@ function bufcategory(target, buffCategory, stack, turn, activeRound, stackTurnAd
 
 --#endregion
 
+-- Functions that return values but don't cause ANY effects.
 --#region Acquisition
 
 --- @param getAs "normal" | "%" | "max" | "missing" | "missing%"
@@ -820,6 +836,7 @@ function ctdsource() return 0 end;
 
 --#endregion
 
+-- Functions that cause effects but don't return values.
 --#region Consequence
 
 --- @param msg string
@@ -830,7 +847,7 @@ function log(msg, int) end
 --- @param target TargetMulti
 --- @param damage integer
 --- @param atkType -1 | 0 | 1 | 2 -- True (-1) | Slash | Pierce | Blunt
---- @param sinType -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 -- True (-1) | Wrath | Lust | Sloth | Gluttony | Gloom | Pride | Envy | White | Black | Red | Pale | Neutral
+--- @param sinType -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 -- True (-1) | Wrath | Lust | Sloth | Gluttony | Gloom | Pride | Envy
 --- Deals fixed sin affinity and attack type damage to the target.
 function bonusdmg(target, damage, atkType, sinType) end
 
@@ -1205,6 +1222,46 @@ function ovwsinres(target, sinType, newValue, add) end
 function refreshspeed(target) end
 
 --- @param target TargetMulti
+--- @param skillId integer
+--- Adds a skill to the default skillset to the provided units.
+function adddefaultskillbyid(target, skillId) end
+
+--- @param target TargetMulti
+--- @param skillId integer
+--- @param amountToAdd integer -- 1 by default
+--- Adds a skill to the pool of drawn skills to the provided units.\
+--- The skill must be in the default skillset for this to work, use adddefaultskillbyid() prior if necessary.
+--- @see adddefaultskillbyid
+function addskilltopool(target, skillId, amountToAdd) end
+
+--- @param newSkillId integer
+--- @param slotIndex? integer
+--- Converts an incoming skill on the dashboard to the specified skill.\
+--- Only works on self, so targets cannot be provided.
+function dropskill(newSkillId, slotIndex) end
+
+--- @param target "Self" | "Target"
+--- @param modeSelection 0 | 1 | 2
+--- @param var integer
+--- Applies a temporary Skill Script to the selected Skill during combat.\
+function giveskillscript(target, modeSelection, var) end
+
+-- Not sure how giveskillscript() works exactly, so if anyone wants to fix it just make a pr :sob:
+
+--- @param x number
+--- @param y number
+--- @param z number
+--- Change the local xyz scale of this unit's appearance.
+function appearancelocalscale(x, y, z) end
+
+--- @param roll number
+--- @param pitch number
+--- @param yaw number
+--- Change the local rotation scale of this unit's appearance.\
+--- Can be used to unsquish units by setting it to (0, 0, 0)
+function appearancelocaleuler(roll, pitch, yaw) end
+
+--- @param target TargetMulti
 --- @param keyword string -- The buff keyword to destroy.
 --- @param destroyRound 0 | 1 | 2 -- This Turn | Next Turn | Both
 --- Destroy buff(s) on targets.
@@ -1252,6 +1309,8 @@ function skillhide(target) end
 
 --#endregion
 
+-- Shorthand functions that only work inside buffs effects.
+-- These act as both Acquisition and Consequence functions.
 --#region Buff Exclusive
 
 --- @param value? integer
@@ -1270,7 +1329,7 @@ function turn(value) return 0 end
 --#endregion
 
 -- Functions that can only be used in Lua
--- They reside here until they are documented.
+-- Functions here may return values unusable in base Modular – strings, tables, etc.
 --#region Lua Exclusive
 
 --- @param target TargetSingle
