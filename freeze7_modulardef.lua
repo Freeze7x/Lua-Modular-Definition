@@ -1,7 +1,7 @@
 ---@meta
 
 --[[
-    Version: 1.2.2
+    Version: 1.2.3
     Modular Version: 4.6.9
 --]]
 
@@ -24,11 +24,6 @@
 ---| "PALE"
 
 ---@alias AttackType
----| "Hit"
----| "Penetrate"
----| "Slash"
-
----@alias AttackTypeCaps
 ---| "HIT"
 ---| "PENETRATE"
 ---| "SLASH"
@@ -728,7 +723,7 @@ function getcoinoperator(target, coinIndex) return 1 end
 function getbufftype(keyword) return 1 end
 
 --- @param target TargetSingle
---- @param atkType AttackTypeCaps
+--- @param atkType AttackType
 --- @return integer
 --- Return an integer (normalized to 0~200) that represents the resistance to an attack type. (Doesn't work for abnormalities)\
 --- (e.g., x0.75 -> 75).
@@ -1219,7 +1214,7 @@ function changemotion(motionType, motionIndex) end
 function changeaffinity(motionType) end
 
 --- @param target TargetMulti
---- @param atkType AttackTypeCaps
+--- @param atkType AttackType
 --- @param newValue integer -- 0 ≤ x ≤ 200 (game uses newValue/100)
 --- @param add? any -- if provided, add newValue to existing resistance instead of overriding.
 --- Override an attack resistance value for the selected targets.
@@ -1312,6 +1307,10 @@ function buffcategory(target, buffCategory, stack, turn, activeRound, stackTurnA
 --- @param newAmount integer
 --- @see getdmg
 function setdmgtaken(newAmount) end
+
+--- @param type AttackType
+--- Changes the attack type of the current skill, similar to the Index Nursefather's attacks.
+function changeatktype(type) end
 
 --- @param target TargetMulti
 --- @param newValue integer
