@@ -1,7 +1,7 @@
 ---@meta
 
 --[[
-    Version: 1.2.3
+    Version: 1.2.4
     Modular Version: 4.6.9
 --]]
 
@@ -1311,6 +1311,11 @@ function setdmgtaken(newAmount) end
 --- @param type AttackType
 --- Changes the attack type of the current skill, similar to the Index Nursefather's attacks.
 function changeatktype(type) end
+
+--- @param change integer
+--- Changes the attack weight of the current skill.\
+--- Does not work on timings that trigger mid-combat, such as WhenUse.
+function atkweight(change) end
 
 --- @param target TargetMulti
 --- @param newValue integer
