@@ -442,8 +442,9 @@ function areallies(target1, target2) return 0 end
 --- @return integer
 --- Returns the ID of the skill currently being used.\
 --- Will not work on timings that do not have skills being used.
+--- @param replaced? "replaced"
 --- @nodiscard
-function getskillid() return 0 end
+function getskillid(replaced) return 0 end
 
 --- @return integer -- Returns 0 if no skill can be found
 --- Returns the ID of the skill the opponent is currently using.\
@@ -548,7 +549,7 @@ function getskilllevel(target) return 0 end
 --- @nodiscard
 function getskillatk(target) return 0 end
 
---- @param target TargetSingle
+--- @param target TargetSingle | "replaced"
 --- @return 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11
 --- Returns the current skill's sin affinity as an integer between 0 and 11.\
 --- 0: Wrath | 1: Lust | 2: Sloth | 3: Gluttony | 4: Gloom | 5: Pride | 6: Envy | 7: White | 8: Black | 9: Red | 10: Pale | 11: Neutral
@@ -562,7 +563,7 @@ function getskillattribute(target) return 0 end
 --- @nodiscard
 function getskilldeftype(target) return 0 end
 
---- @param target TargetSingle
+--- @param target TargetSingle | "replaced"
 --- @return integer
 --- Returns the tier of the current skill, usually 1~3.
 --- @nodiscard
