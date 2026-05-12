@@ -1,8 +1,8 @@
 ---@meta
 
 --[[
-    Version: 1.2.4
-    Modular Version: 4.6.9
+    Version: 1.2.5
+    Modular Version: 4.7.4
 --]]
 
 -- Aliases for ease of use.
@@ -350,7 +350,7 @@ function getwave() return 0 end
 --- @return integer
 --- [NOTE] This always return 0 in Lua scripts.\
 --- Returns the number of times a Modular script has been called.\
---- First time = 0.\
+--- First time = 0.
 --- @nodiscard
 function getactivations() return 0 end
 
@@ -957,7 +957,7 @@ function pattern(value) end
 --- @param dataId integer
 --- @param value integer
 --- Sets encounter-persistent numeric data to the target (or "Encounter" for global stage data) that was set using setdata().\
---- If the data will not be used outside of the Lua scope (i.e., in Modular scripts), it is preferable to use setldata() and getldata() instead.
+--- If the data will not be used outside of the Lua scope (i.e., in Modular scripts), it would be in your best interest to use setldata() and getldata() instead.
 --- @see getdata
 function setdata(target, dataId, value) end
 
@@ -977,6 +977,11 @@ function reusecoin(...) end
 --- @param slotApplication? -2 | -1 | integer -2 = Slot this script is used on | -1 = All slots | 0 or greater = A specific slot index.
 --- Adds aggro to the target across slots.
 function aggro(target, value, turn, slotApplication) end
+
+---@param target TargetMulti
+---@param amount integer
+--- Changes a unit's slot weight.
+function setslotweight(target, amount) end
 
 --- @param target TargetMulti
 --- Reuses the current skill against all targets given.
@@ -1304,7 +1309,7 @@ function deactivebreak(target, breakIndex, sort, reverseIndex) end
 function buffcategory(target, buffCategory, stack, turn, activeRound, stackTurnAddRespectively, amount) end
 
 --- Sets how much damage you take whenever you take damage, MUST be used in conjunction with the ChangeTakeDamage timing.\
---- [NOTE] This overrides the number of damage you take from an attack, but you can combine this consequence with the getdmg() acquirer for more control.\
+--- [NOTE] This overrides the number of damage you take from an attack, but you can combine this consequence with the getdmg() acquirer for more control.
 --- @param newAmount integer
 --- @see getdmg
 function setdmgtaken(newAmount) end
