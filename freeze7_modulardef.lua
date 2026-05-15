@@ -51,14 +51,13 @@
 ---| string
 
 ---@alias TargetMulti
----| "Self"
----| "MainTarget"
+---| TargetSingle
 ---| "EveryTarget"
 ---| "All"
----| "adjLeft"
----| "adjRight"
 ---| "SelfParts"
 ---| "TargetParts"
+---| "Deads"
+---| "Retreats"
 ---| string
 
 ---@alias BuffCategory
@@ -588,10 +587,11 @@ function getattackamount(target) return 0 end
 function iscoinbroken() return 0 end
 
 --- @param target TargetSingle
+--- @param perm? "perm"
 --- @return integer
 --- Returns the amount of skill slots the target has.
 --- @nodiscard
-function getskillslotcount(target) return 0 end
+function getskillslotcount(target, perm) return 0 end
 
 --- @return ModularBoolean
 --- Returns 1 if the battle is a focused encounter, 0 if it is a regular encounter.
@@ -618,6 +618,13 @@ function getbuffcount(target, mode) return 0 end
 --- Example: getunitcount(NoParts99) would return the amount of enemies alive.
 --- @nodiscard
 function getunitcount(target) return 0 end
+
+--- @param team "ally" | "enemy"
+--- @param type "normal" | "current"
+--- @return integer
+--- Returns the amount of backup units on the specified team.\
+--- @nodiscard
+function countbackup(team, type) return 0 end
 
 --- @param target TargetSingle
 --- @return integer
