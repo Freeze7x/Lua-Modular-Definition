@@ -1,8 +1,8 @@
 ---@meta
 
 --[[
-    Version: 1.2.5
-    Modular Version: 4.7.4
+    Version: 1.2.6
+    Modular Version: 4.7.8
 --]]
 
 -- Aliases for ease of use.
@@ -698,6 +698,26 @@ function isusableinduel(target) return 0 end
 --- @nodiscard
 function issameunit(target1, target2) return 0 end
 
+--- @param team "Ally" | "Enemy"
+--- @return ModularBoolean
+--- Returns whether there is backup on the provided team
+--- @nodiscard
+function isbackupenabled(team) return 0 end
+
+--- @param team "Ally" | "Enemy"
+--- @param mode "normal" | "current" -- Just use "normal". Unknown what "current" does.
+--- @return ModularBoolean
+--- Counts the amount of un-initialized Backup units in a team.
+--- @nodiscard
+function countbackup(team, mode) return 0 end
+
+--- @param target1 string
+--- @param target2 string
+--- @return ModularBoolean
+--- Returns whether both selectors refer to the exact same unit.
+--- @nodiscard
+function issameunit(target1, target2) return 0 end
+
 --- @param target TargetSingle
 --- @return ModularBoolean
 --- Returns whether the target's skill is clashable.
@@ -960,7 +980,7 @@ function dmgmult(value) end
 --- Sets the pattern index for the target. (WIP)
 function pattern(value) end
 
---- @param target TargetMulti
+--- @param target TargetMulti | "Encounter"
 --- @param dataId integer
 --- @param value integer
 --- Sets encounter-persistent numeric data to the target (or "Encounter" for global stage data) that was set using setdata().\
